@@ -1,0 +1,39 @@
+version: "3.3"
+
+services:
+
+  racedisplay-service:
+    image: racedisplay-service
+    build: ./driftapi
+    depends_on:
+      - driftapi-service
+    environment:
+      DRIFTAPI_DATABASE_URL: ${DRIFTAPI_DATABASE_URL}
+      DRIFTAPI_DATABASE_NAME: ${DRIFTAPI_DATABASE_NAME}
+      DRIFTAPI_ROOT_PATH: ${DRIFTAPI_ROOT_PATH}
+      DRIFTAPI_DISABLE_OPENAPI: ${DRIFTAPI_DISABLE_OPENAPI}
+      DRIFTAPI_CORS_ALLOW_ORIGINS: ${DRIFTAPI_CORS_ALLOW_ORIGINS}
+    ports:
+      - ${DRIFTAPI_COMPOSE_PORT}:8000
+    profiles:
+      - donotstart
+
+  driftapi-service:
+    image: driftapi-service
+    build: ./driftapi
+    depends_on:
+      - driftapi-db
+    environment:
+      DRIFTAPI_DATABASE_URL:  ${DRIFTAPI_DATABASE_URL}
+      DRIFTAPI_DATABASE_NAME: ${DRIFTAPI_DATABASE_NAME}
+      DRIFTAPI_ROOT_PATH: ${DRIFTAPI_ROOT_PATH}
+      DRIFTAPI_DISABLE_OPENAPI: ${DRIFTAPI_DISABLE_OPENAPI}
+      DRIFTAPI_CORS_ALLOW_ORIGINS: ${DRIFTAPI_CORS_ALLOW_ORIGINS}
+    ports:
+      - ${DRIFTAPI_COMPOSE_PORT}:8000
+
+  driftapi-db:
+    image: mongo
+    ports:
+      - 27018:27017
+

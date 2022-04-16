@@ -1,9 +1,14 @@
+
+"""
+Module defining the driftapi core and enum classes.
+Note: for a complete server implementation, you probably want to also define some additional classes.
+
+"""
+from enum import Enum
 from typing import Optional
 from uuid import UUID
 from datetime import datetime
-from enum import Enum
 
-from fastapi import FastAPI
 from pydantic import BaseModel, ValidationError, Field
 
 
@@ -70,41 +75,7 @@ class PointsAwardedEvent(RaceEvent):
     reason:PointReasons
     combo:Optional[bool] = False
     supercombo:Optional[bool] = False
-    
 
 # This event is triggered whenever the user leaves a run (shutting down the motor)
 class FinishEvent(RaceEvent):
     pass
-
-
-app = FastAPI()
-
-@app.get("/")
-async def root():
-    return {"message": "Welcome to the Sturmkind Dr!ft Multiplayer Racing API. To see the available api calls, visit /docs."}
-
-# This event is triggered when a user enters a server uri in the app. The app can see if there actually is a server behind that uri and could for example show a green light, so that the user knows he entered the right server.
-@app.post("/{race_id}/ping")
-async def ping(race_id:str):
-    return {"message": "Welcome! There is a server with a race ready and waiting for your events."}
-
-# This event is triggered when the user starts a run (free run, race, gymkhana) and after the loading is completed (the user sees the hud of the racer)
-# it's purpose is for the server to control the car setup and if that matches with what is allowed for the race
-@app.post("/{race_id}/events/enter")
-async def create_EnterEvent(race_id:str, enterEvent:EnterEvent):
-    return enterEvent
-
-# This event is triggered when the user hits the "Start Motor" button the first time.
-@app.post("/{race_id}/events/startmotor")
-async def create_StartMotorEvent(race_id:str, startMotorEvent:StartMotorEvent):
-    return startMotorEvent
-
-# This event is triggered whenever a target is recognized
-@app.post("/{race_id}/events/barcode")
-async def create_BarcodeEvent(race_id:str, barcodeEvent:BarcodeEvent):
-    return barcodeEvent
-
-# This event is triggered whenever the app awards the user with points (also for negative points or in-time-finish)
-@app.post("/{race_id}/events/points")
-async def create_PointsAwardedEvent(race_id:str, pointsAwardedEvent:PointsAwardedEvent):
-    return pointsAwardedEvent

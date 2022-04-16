@@ -54,13 +54,18 @@ and submits the reason, the number of points awarded for this reason and the tot
 
 
 # installation
-pip install "fastapi[all]"
+After cloning the repository, you can startup the service by running
 
-# run
-uvicorn main:app --reload
+docker-compose up --build
+
+in the root directory (the one containing the docker-compose.yml file)
+
+After that, visit to get started.
 
 # using this code
-After running, a local webserver should be open and accessible via the displayed adress in the console that you used to start the program. Just open a webbrowser and go to the displayed adress. A small welcome message should appear. Go to /docs to browse the interface description. You can also download an openapi.json description of the interface that can be used in code-generators etc. to generate a server stub implementing this interface.
+After running, a local webserver should be open and accessible via a webbrowser entering "localhost:8001". A small welcome message should appear. Go to /docs to browse the interface description. You can also download an openapi.json description of the interface that can be used in code-generators etc. to generate a server stub implementing this interface.
+
+Currently, there is also a small MongoDB database already integrated behind the api, so feel free to test it out using the swagger ui. Enter a race, submit barcode events and use the /yourraceid/events put call to see the entered events.
 
 # whats next?
 This is just a proposal to sharpen the discussion. Please check the concept and feel free to send me any questions to: geissler@illusion-games.de. After we have settled on the api, I can implement a simple webserver based on it and then, the uri-functionality and api calls can be implemented in the sturmkind app.
