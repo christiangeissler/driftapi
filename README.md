@@ -60,7 +60,7 @@ docker-compose up --build
 
 in the root directory (the one containing the docker-compose.yml file)
 
-After that, visit to get started.
+After that, visit localhost:8001 to get started.
 
 # using this code
 After running, a local webserver should be open and accessible via a webbrowser entering "localhost:8001". A small welcome message should appear. Go to /docs to browse the interface description. You can also download an openapi.json description of the interface that can be used in code-generators etc. to generate a server stub implementing this interface.
