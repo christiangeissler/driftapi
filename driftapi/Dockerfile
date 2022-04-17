@@ -14,5 +14,5 @@ COPY --from=builder /app/dist/driftapi*.whl ./whl/
 RUN pip3 install ./whl/*
 
 # run service with uvicorn
-EXPOSE 8000
-ENTRYPOINT [ "uvicorn", "driftapi.main:app", "--host", "0.0.0.0", "--port", "8000" ]
+EXPOSE 8001
+ENTRYPOINT [ "uvicorn", "driftapi.main:app", "--host", "0.0.0.0", "--port", "8001" ]

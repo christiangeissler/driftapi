@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException
 from . import __version__
 from .singletons import settings
 from .database import db_client
-from ..driftapi.model import EnterEvent, StartMotorEvent, BarcodeEvent, PointsAwardedEvent, FinishEvent
+from .model import EnterEvent, StartMotorEvent, BarcodeEvent, PointsAwardedEvent, FinishEvent
 
 
 # create App
@@ -19,8 +19,9 @@ app = FastAPI(
 
 @app.get("/")
 async def root():
-    return {"message": "Welcome to the Sturmkind Dr!ft Multiplayer Racing API. To see the available api calls, visit /docs."}
+    return {"message": "Welcome to the Racedisplay application. To see the available api calls, visit /docs."}
 
+'''
 # This event is triggered when a user enters a server uri in the app. The app can see if there actually is a server behind that uri and could for example show a green light, so that the user knows he entered the right server.
 @app.post("/{race_id}/ping")
 async def ping(race_id:str):
@@ -52,8 +53,15 @@ async def create_PointsAwardedEvent(race_id:str, pointsAwardedEvent:PointsAwarde
 async def create_FinishEvent(race_id:str, finishEvent:FinishEvent):
     return db_client.insert_raceevent(race_id, finishEvent)
 
-# This event is triggered whenever a player shuts down the motor and finishes the run
+'''
+
 @app.put("/{race_id}/events")
 async def get_Events(race_id:str, query:dict):
     query["race"]=race_id
     return db_client.find_raceevent(query)
+
+@app.put("/{race_id}/")
+async def get_scoreboard(race_id:str):
+    return db_client.get_scoreboard(race_id)
+
+    

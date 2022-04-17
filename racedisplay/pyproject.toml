@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "driftapi"
+name = "racedisplay"
 version = "0.1.0"
-description = "driftapi server to retreive and store race information from the sturmkind dr!ft app"
+description = "Racedisplay server that works with the database that is populated by the driftapi server"
 authors = ["Christian Geißler <drift@christiangeissler.com>"]
 license = "MIT"
 

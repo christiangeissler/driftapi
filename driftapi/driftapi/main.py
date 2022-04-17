@@ -52,8 +52,10 @@ async def create_PointsAwardedEvent(race_id:str, pointsAwardedEvent:PointsAwarde
 async def create_FinishEvent(race_id:str, finishEvent:FinishEvent):
     return db_client.insert_raceevent(race_id, finishEvent)
 
-# This event is triggered whenever a player shuts down the motor and finishes the run
+'''
+# This is a debug function that you can use to query for the created race events.
 @app.put("/{race_id}/events")
 async def get_Events(race_id:str, query:dict):
     query["race"]=race_id
     return db_client.find_raceevent(query)
+'''

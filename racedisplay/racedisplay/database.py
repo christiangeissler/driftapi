@@ -7,9 +7,10 @@ import time
 import uuid
 from typing import List, Optional
 
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING, ASCENDING
 
 from .model import RaceEvent, EnterEvent, StartMotorEvent, BarcodeEvent, PointsAwardedEvent, FinishEvent
+from .model_racedisplay import PlayerStatus
 from .singletons import settings, logger
 
 
@@ -45,6 +46,43 @@ class DbClient:
         logger.info(query)
         res = self.raceevent_db.find(query)
         return res and [_convert(x, globals()[x["class"]]) for x in res]
+
+    def update_playerstatus(self, race_id:str) -> str:
+        query = {"race":race_id, "class":"PlayerStatus"}
+        res = self.raceevent_db.db.find_one(query, sort=[( 'updated_at', DESCENDING )])
+        latestPlayerStatus = _convert(res, PlayerStatus)
+
+        updated_at = 0
+        if latestPlayerStatus:
+            updated_at = latestPlayerStatus['updated_at']
+
+        logger.info("update player status newer than "+str(int))
+
+        query = {"race":race_id, "class":"EnterEvent", "updated_at":{"$lt": updated_at}}
+        res = self.raceevent_db.db.find(query, sort=[( 'updated_at', DESCENDING )])
+
+        for e in [_convert(x, EnterEvent) for x in res]:
+            enterEvent = EnterEvent(e)
+            playerStatus = PlayerStatus(
+                uuid=enterEvent.uuid,
+                timestamp = enterEvent.timestamp,
+                enterEvent = enterEvent,
+                lapsCompleted = 0,
+                totalPoints = 0,
+                bestLap = None,
+                )
+            self.insert_raceevent(race_id, playerStatus)
+
+    def update_laps(self, race_id:str) -> str:
+        pass
+
+    def get_scoreboard(self, race_id:str) -> str:
+        self.update_playerstatus(race_id)
+        self.update_laps(race_id)
+        query = {"race":race_id, "class":"PlayerStatus"}
+        res = self.raceevent_db.db.find(query, sort=[( 'bestLap', ASCENDING )])
+        return res and [_convert(x, globals()[x["class"]]) for x in res]
+
 
 class PyMongoClient:
     """Low-Level DB Client for pymongo (synchronous)"""

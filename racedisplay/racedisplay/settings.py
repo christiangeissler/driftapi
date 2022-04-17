@@ -16,5 +16,5 @@ class Settings(BaseSettings):
     database_name: str = "driftapi-test-db"
 
     class Config:
-        env_prefix = "DRIFTAPI_"
+        env_prefix = "RACEDISPLAY_"
         env_file = ".env"

@@ -6,7 +6,6 @@ RUN pip3 install "poetry==1.1.11"
 WORKDIR /app
 COPY pyproject.toml poetry.lock ./
 COPY ./racedisplay ./racedisplay
-COPY ../driftapi/driftapi/model.py ./racedisplay/model.py
 RUN poetry build
 
 # build the actual image with just Python + PIP

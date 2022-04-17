@@ -41,8 +41,6 @@ class DbClient:
         return res and _convert(res, cls)
 
     def find_raceevent(self, query:dict) -> List[RaceEvent]:
-        logger.info("find_raceevent")
-        logger.info(query)
         res = self.raceevent_db.find(query)
         return res and [_convert(x, globals()[x["class"]]) for x in res]
 
