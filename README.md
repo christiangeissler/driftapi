@@ -56,7 +56,7 @@ and submits the reason, the number of points awarded for this reason and the tot
 # installation
 After cloning the repository, you can startup the service by running
 
-docker-compose up --build
+docker-compose --profile driftapi up up --build
 
 in the root directory (the one containing the docker-compose.yml file)
 

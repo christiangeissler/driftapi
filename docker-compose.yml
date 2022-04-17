@@ -4,7 +4,7 @@ services:
 
   racedisplay-service:
     image: racedisplay-service
-    build: ./driftapi
+    build: ./racedisplay
     depends_on:
       - driftapi-service
     environment:
@@ -16,7 +16,7 @@ services:
     ports:
       - ${DRIFTAPI_COMPOSE_PORT}:8000
     profiles:
-      - donotstart
+      - racedisplay
 
   driftapi-service:
     image: driftapi-service
@@ -31,6 +31,8 @@ services:
       DRIFTAPI_CORS_ALLOW_ORIGINS: ${DRIFTAPI_CORS_ALLOW_ORIGINS}
     ports:
       - ${DRIFTAPI_COMPOSE_PORT}:8000
+    profiles:
+      - driftapi
 
   driftapi-db:
     image: mongo

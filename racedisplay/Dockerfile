@@ -5,14 +5,15 @@ RUN pip3 install "poetry==1.1.11"
 # copy and build service to Wheel
 WORKDIR /app
 COPY pyproject.toml poetry.lock ./
-COPY ./driftapi ./driftapi
+COPY ./racedisplay ./racedisplay
+COPY ../driftapi/driftapi/model.py ./racedisplay/model.py
 RUN poetry build
 
 # build the actual image with just Python + PIP
 FROM tiangolo/uvicorn-gunicorn:python3.8-slim
-COPY --from=builder /app/dist/driftapi*.whl ./whl/
+COPY --from=builder /app/dist/racedisplay*.whl ./whl/
 RUN pip3 install ./whl/*
 
 # run service with uvicorn
 EXPOSE 8000
-ENTRYPOINT [ "uvicorn", "driftapi.main:app", "--host", "0.0.0.0", "--port", "8000" ]
+ENTRYPOINT [ "uvicorn", "racedisplay.main:app", "--host", "0.0.0.0", "--port", "8000" ]
