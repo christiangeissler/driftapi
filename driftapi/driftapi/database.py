@@ -24,7 +24,7 @@ class DbClient:
         db = mongo_client[settings.database_name]
         self.raceevent_db = PyMongoClient(db["raceevent"])
 
-    def insert_raceevent(self, race_id:str, obj: RaceEvent) -> str:
+    def insert_raceevent(self, race_id:str, obj: RaceEvent, sha3Password = None) -> str:
         values = {**obj.dict(), "created_at": get_time(), "updated_at": get_time(), "class": type(obj).__name__, "race": race_id}
         return self.raceevent_db.insert(values)
 

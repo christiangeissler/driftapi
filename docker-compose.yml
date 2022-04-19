@@ -2,6 +2,14 @@ version: "3.3"
 
 services:
 
+  racedisplay-service2:
+    image: racedisplay-service2
+    build: ./streamlit
+    depends_on:
+      - driftapi-db
+    ports:
+      - 8080:8080
+
   racedisplay-service:
     image: racedisplay-service
     build: ./racedisplay
@@ -21,6 +29,8 @@ services:
       RACEDISPLAY_CORS_ALLOW_ORIGINS: ${RACEDISPLAY_CORS_ALLOW_ORIGINS}
     ports:
       - 8000:8000
+    profiles:
+      - donotstart
 
   driftapi-service:
     image: driftapi-service
