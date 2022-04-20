@@ -1,9 +1,8 @@
 FROM python:3.7
 WORKDIR /app
-COPY requirements.txt ./requirements.txt
+COPY . .
 RUN pip install -r requirements.txt
 EXPOSE 8080
-COPY . ./app
-ENTRYPOINT ["streamlit", "run"]
+ENV STREAMLIT_SERVER_PORT=8080
 
-CMD ["app.py"]
+CMD ["streamlit", "run", "app.py"]

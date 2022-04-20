@@ -32,7 +32,7 @@ def main():
       if submitted:
           st.write("Result")
           body = {}
-          result = fetch(session, f"http://localhost:8000/{race_id}/events", body)
+          result = fetch(session, f"http://localhost:8001/{race_id}/events", body)
           if result:
               toBeDisplayedData = [{"username":r["username"]} for r in result if ("username" in r.keys())]
               st.dataframe(data=toBeDisplayedData, width=None, height=None)

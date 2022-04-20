@@ -10,28 +10,6 @@ services:
     ports:
       - 8080:8080
 
-  racedisplay-service:
-    image: racedisplay-service
-    build: ./racedisplay
-    depends_on:
-      - driftapi-db
-    environment:
-      DRIFTAPI_DATABASE_URL: ${DRIFTAPI_DATABASE_URL}
-      DRIFTAPI_DATABASE_NAME: ${DRIFTAPI_DATABASE_NAME}
-      DRIFTAPI_ROOT_PATH: ${DRIFTAPI_ROOT_PATH}
-      DRIFTAPI_DISABLE_OPENAPI: ${DRIFTAPI_DISABLE_OPENAPI}
-      DRIFTAPI_CORS_ALLOW_ORIGINS: ${DRIFTAPI_CORS_ALLOW_ORIGINS}
-
-      RACEDISPLAY_DATABASE_URL: ${RACEDISPLAY_DATABASE_URL}
-      RACEDISPLAY_DATABASE_NAME: ${RACEDISPLAY_DATABASE_NAME}
-      RACEDISPLAY_ROOT_PATH: ${RACEDISPLAY_ROOT_PATH}
-      RACEDISPLAY_DISABLE_OPENAPI: ${RACEDISPLAY_DISABLE_OPENAPI}
-      RACEDISPLAY_CORS_ALLOW_ORIGINS: ${RACEDISPLAY_CORS_ALLOW_ORIGINS}
-    ports:
-      - 8000:8000
-    profiles:
-      - donotstart
-
   driftapi-service:
     image: driftapi-service
     build: ./driftapi
