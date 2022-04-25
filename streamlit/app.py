@@ -1,5 +1,8 @@
 import streamlit as st
 import requests
+import pandas as pd 
+from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
+import time
 
 def fetch(session, url, body):
     try:
@@ -30,16 +33,20 @@ def main():
       submitted = st.form_submit_button("Show Scoreboard")
 
       if submitted:
-          st.write("Result")
-          body = {}
-          result = fetch(session, f"http://localhost:8001/{game_id}/scoreboard", body)
-          if result:
-              #toBeDisplayedData = [{"username":r["user_name"], "best lap":r["best_lap"], "laps":r["laps_completed"]} for r in result if ("user_name" in r.keys())]
-              #st.dataframe(data=toBeDisplayedData, width=None, height=None)
-              print(result)
-              st.dataframe(data=result, width=None, height=None)
-          else:
-              st.error("Error")
+
+        #agrid = AgGrid(df)
+        future = st.empty()
+
+        while True:
+            body = {}
+            result = fetch(session, f"http://localhost:8001/{game_id}", body)
+            if result:
+                with future.container():
+                    toBeDisplayedData = pd.DataFrame( [{"username":r["user_name"], "best lap":r["best_lap"], "laps":r["laps_completed"]} for r in result if ("user_name" in r.keys())] )
+                    st.dataframe(toBeDisplayedData)
+            else:
+                st.error("Error")
+            time.sleep(1)
 
 if __name__ == '__main__':
     main()

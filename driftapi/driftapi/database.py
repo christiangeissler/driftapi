@@ -60,28 +60,32 @@ class DbClient:
         return res and [_convert(x, PlayerStatus) for x in res]
 
     def insert_or_update_playerstatus(self, game_id:str, obj: EnterEvent) -> bool:
-        #construct new player status object
-        logger.info("Constructing new player status object")
+        
 
-        playerStatus = PlayerStatus(game_id = obj.game_id,
+        playerStatus = PlayerStatus(
+            game_id = obj.game_id,
             user_id = obj.user_id,
             user_name = obj.user_name,
             laps_completed = 0,
             total_points = 0,
             best_lap = ""
         )
-        result = self.find_playerstatus(game_id, obj.user_id)
-        if result:
-            self.update_playerstatus(result.id, playerStatus)
+
+        id, playerStatusOld = self.find_playerstatus(game_id, obj.user_id)
+        if playerStatusOld:
+            'reset player information'
+            self.update_playerstatus(id, playerStatus)
         else:
-            self.insert_playerstatus(game_id, playerStatus)
+            self.insert_playerstatus(playerStatus)
         return True
 
-    def insert_playerstatus(self, game_id:str, obj: PlayerStatus) -> str:
+    def insert_playerstatus(self, obj: PlayerStatus) -> str:
+        logger.info("create playerstatus")
         values = {**obj.dict(), "created_at": get_time(), "updated_at": get_time(), "class": type(obj).__name__}
         return self.playerstatus_db.insert(values)
 
     def update_playerstatus(self, id_: str, obj: PlayerStatus) -> bool:
+        logger.info("update playerstatus")
         values = {**obj.dict(), "updated_at": get_time()}
         return self.playerstatus_db.update(id_, values)
 
@@ -92,10 +96,14 @@ class DbClient:
         res = self.playerstatus_db.get(id_)
         return res and _convert(res, PlayerStatus)
 
-    def find_playerstatus(self, game_id:str, id: uuid) -> Optional[PlayerStatus]:
-        query = {"game_id":game_id, "id":id}
-        res = self.playerstatus_db.db.find_one(query)
-        return _convert(res, PlayerStatus)
+    def find_playerstatus(self, game_id:str, user_id: str) -> Optional[PlayerStatus]:
+        query = {"game_id":game_id, "user_id":user_id}
+        res = self.playerstatus_db.find_one(query)
+        logger.info("find playerstatus")
+        logger.info(res)
+        if res:
+            return res['_id'], _convert(res, PlayerStatus)
+        return None, None
 
     def list_playerstati(self, game_id:str) -> List[PlayerStatus]:
         query = {"game_id":game_id}
@@ -119,12 +127,15 @@ class PyMongoClient:
     def find(self, values: dict) -> dict:
         return self.db.find(values)
 
+    def find_one(self, values: dict) -> dict:
+        return self.db.find_one(values)
+
     def update(self, id_: str, values: dict) -> bool:
-        res = self.db.update_one({"_id": uuid.UUID(id_)}, {"$set": values})
+        res = self.db.update_one({"_id": uuid.UUID(str(id_))}, {"$set": values})
         return res.modified_count == 1
 
     def delete(self, id_: str) -> bool:
-        res = self.db.delete_one({"_id": uuid.UUID(id_)})
+        res = self.db.delete_one({"_id": uuid.UUID(str(id_))})
         return res.deleted_count == 1
 
 
