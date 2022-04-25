@@ -1,0 +1,49 @@
+Drift-Community-Api (Version 1.4.13)
+
+#10 User in app settings:
+Passwort: Wollt ihr das erst mal weglassen? Oder vielleicht doch noch Optional hinzufügen? Aktuell habe ich bei meiner API bei jedem request ein weiteres optionales Feld namens "sha3_password" hinten drangehängt. Das wäre dann der sha3 hash des passwortes des Rennens.
+
+#17 ##Ping
+-> Was genau soll der "status" sein? Wann wird der true, wann false gesetzt?
+
+-> Nur wenn wir ein passwort dabei haben wollen: Muss man dass auch beim Ping angeben? Dann müsste da doch ein Body dabei sein, ansonsten können wir es so lassen. Wenn wir das ohne passwort machen, dann kann jeder die Start-Zeit einsehen.
+
+#54ff
+Wenn ich das richtig sehe, dann besteht die Basis aller folgenden requests immer aus:
+"app_version": "1.4.13",
+"game_id": "Race2022",
+"user_id": "b5c5a6e3-3378-4d61-bd3f-02510827d1bf",
+"user_name": "Racer5000",
+"time": "2022-04-22T06:56:09.6986656Z",
+Wovon der user_name aber nicht immer mitgeliefert werden muss. Es reicht, den einmalig beim enter event im data Teil mit zu schicken. Damit spart man dann im Verlauf des Rennens etwas Ressourcen. Oder gibt es einen Grund, den Nutzernamen immer wieder mit zu schicken den ich gerade übersehe?
+
+#61 "start_time" -> Ist das die Start-Zeit die in der App durch das Feedback der ping Funktion eingestellt wurde? Wenn ja, dann sollte diese OPTIONAL sein, denn diese MUSS ja nicht gesetzt werden.
+
+Weitere Anmerkung zu der Start-Zeit: Was ist, wenn die Leute dem Rennen schon beigetreten sind und dann erst die Start-Zeit festgelegt wird? Oder wenn der Countdown abgebrochen werden muss? In der Regel macht man ja den Racer an, verbindet sich dann sofort damit (damit der nicht wieder aus geht) und dann stellt man den Racer in die Aufstellung. Erst wenn alle bereit sind, wird der Countdown gestartet. Eine VOR dem Beitritt festgelegte Startzeit ist unter dem Gesichtspunkt sehr unpraktisch. Und die Leute erst beitreten zu lassen wenn die genaue Startzeit fest steht wird dazu führen, dass manche der Racer zwischendurch aus gehen und dann schleunigst wieder angemacht werden müssen. Ruft die Racer die "Ping" funktion auch nach dem Beitritt regelmässig noch mal auf, um eine eventuell aktualisierte oder neu hinzugefügte Startzeit mitzubekommen?
+
+#62 "time_limit" -> Ist das eine zukünftig in der App einstellbare weitere Option? Wenn ja: Coole Sache, passt.
+
+#90 "track_bundles" -> ist rally noch eine neue Variante die ich noch nicht kenne? Muss man dafür noch etwas beachten?
+
+#124 "signal_time" -> Ist diese identisch mit "time" darüber? oder wie unterscheidet die sich?
+
+#149 "false_start" -> ich nehme mal an, dass dieser flag dannn bei jedem target true ist, wenn es einen Fehlstart gab?
+
+#147 "time" -> Wie unterscheidet sich diese Zeit von der Zeit in #145?
+
+#152 "score" -> Wie wird mit Targets wie dem 360er verfahren, wo die Punktzahl erst verzögert feststeht? Oder ist das der Grund für das zweite "time" feld in #147? Hier wäre eine Klarstellung für die Dokumentation wichtig, welche Zeit damit jeweils gemeint ist.
+
+#Zum Datenmodell insgesamt:
+Das scheint mir in dieser Fassung noch etwas uneinheitlich und unsauber zu sein.
+
+Beispiel: Bei jedem Aufruf wird die game_id mitverschickt. Aber diese wird ebenfalls auch schon beim Aufruf selbst als Teil der URI verschickt. Diese noch mal in der Payload zu doppeln, gibt es dafür einen Grund?
+
+Beispiel2: Alle Events (Enter, Start, Target und End) bestehen aus einem Basisblock und dann jeweils einem "data" feld, in dem dann aber spezifische Dinge hinterlegt sind. Ich hab das jetzt mal so nachmodelliert, aber es bläht das Datenmodell natürlich unnötig auf. Wenn das für deine Programmierer so einfacher zu implementieren ist, können wir das natürlich so machen, ist nur etwas "unschick", so etwas löst man normalerweise über Vererbung.
+
+Beispiel3: Die unterschiedlichen Zeiten: Standardmässig wird ja immer "time" mitgeschickt. Jetzt haben aber die Events Start->signal_time, Target->time und End->finished_time noch mal weitere Zeitfelder, bei denen ich mich frage, welchen Sinn die über das normale Zeitfeld hinaus haben.
+
+
+
+
+
+

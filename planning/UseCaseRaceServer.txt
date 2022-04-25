@@ -1,0 +1,29 @@
+66f8b19f9309b046a031f171a7de1bf4e6571358b0b874f7366e03c3f272645c
+
+Basic Setup:
+3 VM's:
+
+Driftapi VM (FastAPI + MongoDB connection)
+Database VM (MongoDB)
+Racedisplay VM (Frontend)
+
+Racedisplay Pages:
+
+Start Page
+    - List of created races (clickable)
+    - Button "Create Race"
+    
+Create Race
+    - Select Name, OPTIONAL: start time, OPTIONAL: password
+    (Future: Select Restrictions)
+    -> Creates Race ID
+    
+View Race
+    - Back Button (back to Start Page)
+    - List of Participants, their completed laps, last lap, best lap
+    - List is sortable by "best lap" and "completed laps"-> tie breaker is, who sends in his lap time the first according to server time
+    
+    - Participants are clickable
+    
+Race Participant
+    Future

@@ -15,8 +15,10 @@ from .model import RaceEvent, EnterEvent
 
 
 #Note: uuid is the players uuid, timestamp is the last update to the player status, where timestamp refers to the app-time, not the server time.
-class PlayerStatus(RaceEvent):
-    enterEvent: EnterEvent
-    lapsCompleted:int
-    totalPoints:int
-    bestLap: timedelta
+class PlayerStatus(BaseModel):
+    game_id:str
+    user_id:UUID
+    user_name:str
+    laps_completed:int
+    total_points:int
+    best_lap: str

@@ -26,16 +26,18 @@ def main():
   """
   with st.form("my_form"):
 
-      race_id = st.text_input("Race ID", value="Race1", max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, disabled=False)
+      game_id = st.text_input("Game ID", value="Race1", max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, disabled=False)
       submitted = st.form_submit_button("Show Scoreboard")
 
       if submitted:
           st.write("Result")
           body = {}
-          result = fetch(session, f"http://localhost:8001/{race_id}/events", body)
+          result = fetch(session, f"http://localhost:8001/{game_id}/scoreboard", body)
           if result:
-              toBeDisplayedData = [{"username":r["username"]} for r in result if ("username" in r.keys())]
-              st.dataframe(data=toBeDisplayedData, width=None, height=None)
+              #toBeDisplayedData = [{"username":r["user_name"], "best lap":r["best_lap"], "laps":r["laps_completed"]} for r in result if ("user_name" in r.keys())]
+              #st.dataframe(data=toBeDisplayedData, width=None, height=None)
+              print(result)
+              st.dataframe(data=result, width=None, height=None)
           else:
               st.error("Error")
 

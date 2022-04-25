@@ -10,7 +10,7 @@ from typing import List, Optional
 
 from pymongo import MongoClient, DESCENDING, ASCENDING
 
-from .model import RaceEvent, EnterEvent, StartMotorEvent, BarcodeEvent, PointsAwardedEvent, FinishEvent
+from .model import RaceEvent, EnterEvent, StartEvent, TargetEvent, EndEvent
 from .model_racedisplay import PlayerStatus
 from .singletons import settings, logger
 
@@ -27,10 +27,14 @@ class DbClient:
         self.raceevent_db = PyMongoClient(db["raceevent"])
         self.playerstatus_db = PyMongoClient(db["playerstatus"])
 
-    def insert_raceevent(self, race_id:str, obj: RaceEvent, sha3_password = None) -> str:
-        values = {**obj.dict(), "created_at": get_time(), "updated_at": get_time(), "class": type(obj).__name__, "race": race_id}
-        if obj is EnterEvent:
-            self.insert_or_update_playerstatus(race_id, obj)
+    def insert_raceevent(self, game_id:str, obj: RaceEvent, sha3_password = None) -> str:
+        obj.game_id = game_id#for safety
+        values = {**obj.dict(), "created_at": get_time(), "updated_at": get_time(), "class": type(obj).__name__}
+
+        logger.info(type(obj).__name__)
+        if type(obj) is EnterEvent:
+            logger.info("insert or update player status")
+            self.insert_or_update_playerstatus(game_id, obj)
         return self.raceevent_db.insert(values)
 
     def update_raceevent(self, id_: str, raceevent: RaceEvent) -> bool:
@@ -49,35 +53,36 @@ class DbClient:
         res = self.raceevent_db.find(query)
         return res and [_convert(x, globals()[x["class"]]) for x in res]
 
-    def get_scoreboard(self, race_id:str) -> str:
-        query = {"race":race_id}
+    def get_scoreboard(self, game_id:str) -> List[PlayerStatus]:
+        query = {"game_id":game_id}
         #res = self.playerstatus_db.db.find(query, sort=[( 'bestLap', ASCENDING )])
         res = self.playerstatus_db.db.find(query)
-        return res and [_convert(x, globals()[x["class"]]) for x in res]
+        return res and [_convert(x, PlayerStatus) for x in res]
 
-    def insert_or_update_playerstatus(self, race_id:str, obj: EnterEvent) -> bool:
+    def insert_or_update_playerstatus(self, game_id:str, obj: EnterEvent) -> bool:
         #construct new player status object
-        playerStatus = PlayerStatus(
-            uuid = obj.uuid, 
-            timestamp = obj.timestamp,
-            enterEvent = obj,
-            lapsCompleted = 0,
-            totalPoints = 0,
-            bestLap = None
-            )
-        result = self.find_playerstatus(race_id, obj.uuid)
+        logger.info("Constructing new player status object")
+
+        playerStatus = PlayerStatus(game_id = obj.game_id,
+            user_id = obj.user_id,
+            user_name = obj.user_name,
+            laps_completed = 0,
+            total_points = 0,
+            best_lap = ""
+        )
+        result = self.find_playerstatus(game_id, obj.user_id)
         if result:
-            self.update_playerstatus(self, result.id, playerStatus)
+            self.update_playerstatus(result.id, playerStatus)
         else:
-            self.insert_playerstatus(self, race_id, playerStatus)
+            self.insert_playerstatus(game_id, playerStatus)
         return True
 
-    def insert_playerstatus(self, race_id:str, obj: PlayerStatus) -> str:
-        values = {**obj.dict(), "created_at": get_time(), "updated_at": get_time(), "class": type(obj).__name__, "race": race_id}
+    def insert_playerstatus(self, game_id:str, obj: PlayerStatus) -> str:
+        values = {**obj.dict(), "created_at": get_time(), "updated_at": get_time(), "class": type(obj).__name__}
         return self.playerstatus_db.insert(values)
 
     def update_playerstatus(self, id_: str, obj: PlayerStatus) -> bool:
-        values = {**raceevent.dict(), "updated_at": get_time()}
+        values = {**obj.dict(), "updated_at": get_time()}
         return self.playerstatus_db.update(id_, values)
 
     def delete_playerstatus(self, id_: str) -> bool:
@@ -87,10 +92,16 @@ class DbClient:
         res = self.playerstatus_db.get(id_)
         return res and _convert(res, PlayerStatus)
 
-    def find_playerstatus(self, race_id:str, uuid: uuid) -> Optional[PlayerStatus]:
-        query = {"race":race_id, "uuid":uuid}
-        res = self.playerstatus_db.find(query)
+    def find_playerstatus(self, game_id:str, id: uuid) -> Optional[PlayerStatus]:
+        query = {"game_id":game_id, "id":id}
+        res = self.playerstatus_db.db.find_one(query)
         return _convert(res, PlayerStatus)
+
+    def list_playerstati(self, game_id:str) -> List[PlayerStatus]:
+        query = {"game_id":game_id}
+        res = self.playerstatus_db.find(query)
+        return res and [_convert(x, PlayerStatus) for x in res]
+
 
 class PyMongoClient:
     """Low-Level DB Client for pymongo (synchronous)"""

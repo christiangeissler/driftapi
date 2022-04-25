@@ -2,8 +2,8 @@ version: "3.3"
 
 services:
 
-  racedisplay-service2:
-    image: racedisplay-service2
+  racedisplay-service:
+    image: racedisplay-service
     build: ./streamlit
     depends_on:
       - driftapi-db
