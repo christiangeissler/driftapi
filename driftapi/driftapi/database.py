@@ -33,7 +33,7 @@ class DbClient:
         db = mongo_client[settings.database_name]
         self.raceevent_db = PyMongoClient(db["raceevent"])
         self.playerstatus_db = PyMongoClient(db["playerstatus"])
-        self.game_db = GenericDbClient[Game](db)
+        self.game_db = GenericDbClient[Game](db, Game)
 
     def insert_raceevent(self, game_id:str, obj: RaceEvent, sha3_password = None) -> str:
         obj.game_id = game_id#for safety
@@ -166,12 +166,11 @@ class GenericDbClient(Generic[T]):
     db:PyMongoClient
     cls:type
 
-    def __init__(self, mongo_client):
+    def __init__(self, mongo_client, cls:type):
         db = mongo_client[settings.database_name]
         self.db = PyMongoClient(db[T.__name__])
-        logger.info("Generic class init: ")
-        logger.info(get_args(T))
-        self.cls = get_args(T)
+        self.cls = cls
+
 
     def insert(self, obj:T) -> str:
         values = {**obj.dict(), "created_at": get_time(), "updated_at": get_time(), "class": type(obj).__name__}
@@ -186,7 +185,7 @@ class GenericDbClient(Generic[T]):
 
     def get(self, id_: str) -> Optional[T]:
         res = self.db.get(id_)
-        return res and _convert(res, type(T))
+        return res and _convert(res, self.cls)
 
     def find(self, query:dict) -> Optional[List[str]]:
         res = self.db.find(query)
@@ -196,7 +195,7 @@ class GenericDbClient(Generic[T]):
     def find_and_get(self, query:dict) -> Optional[List[T]]:
         res = self.db.find(query)
         if res is not None:
-            return [_convert(x, type(T)) for x in res]
+            return [_convert(x, self.cls) for x in res]
 
     def find_one(self, query:dict) -> Optional[str]:
         res = self.db.find_one(query)
@@ -206,7 +205,7 @@ class GenericDbClient(Generic[T]):
     def find_one_and_get(self, query:dict) -> Optional[T]:
         res = self.db.find(query)
         if res is not None:
-            return _convert(res, type(T))
+            return _convert(res, self.cls)
 
 
 # Singleton instance
