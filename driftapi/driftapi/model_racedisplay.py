@@ -11,7 +11,21 @@ from uuid import UUID
 from datetime import datetime, timedelta
 
 from pydantic import BaseModel, ValidationError, Field
-from .model import RaceEvent, EnterEvent
+#from .model import RaceEvent, EnterEvent
+
+
+class Game(BaseModel):
+    game_id:str
+    password_sh3:Optional[str]
+    start_time:Optional[datetime]
+
+    track_id:Optional[str]
+
+    time_limit:Optional[float] = Field(None, title="the time limit for the run, in seconds")
+    lap_count:Optional[int] = Field(None, title="number of rounds (for the race mode)")
+    #future: add more conditions (race conditions)
+
+
 
 
 #Note: uuid is the players uuid, timestamp is the last update to the player status, where timestamp refers to the app-time, not the server time.

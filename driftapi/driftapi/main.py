@@ -3,10 +3,10 @@ from typing import Optional
 
 
 from . import __version__
-from .singletons import settings
+from .singletons import settings, logger
 from .database import db_client
 from .model import EndEvent, EnterEvent, StartEvent, TargetEvent, EndEvent
-from .model_racedisplay import PlayerStatus
+from .model_racedisplay import PlayerStatus, Game
 
 # create App
 app = FastAPI(
@@ -63,3 +63,20 @@ if settings.enable_racedisplay:
     @app.put("/{game_id}/")
     async def get_scoreboard(game_id:str):
         return db_client.get_scoreboard(game_id)
+
+    @app.post("/game/create")
+    async def create_game(game:Game):
+        logger.info("create game")
+        logger.info(game)
+        return db_client.game_db.insert(game)
+
+    @app.post("/game/delete")
+    async def create_game(game_id:str):
+        query = {"game_id":game_id}
+        id = db_client.game_db.find_one(query)
+        if id:
+            return db_client.game_db.delete(id)
+
+    @app.post("/game/find")
+    async def create_game(query:dict):
+        return db_client.game_db.find_and_get(query)

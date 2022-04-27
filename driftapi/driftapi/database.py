@@ -6,13 +6,20 @@ converting them back to their actual data types on retrieval, etc.
 from datetime import timedelta
 import time
 import uuid
-from typing import List, Optional
+from typing import List, Optional, TypeVar, Generic, cast, Any, Type, get_args
+from collections.abc import Callable
 
 from pymongo import MongoClient, DESCENDING, ASCENDING
+from pydantic import BaseModel
 
 from .model import RaceEvent, EnterEvent, StartEvent, TargetEvent, EndEvent
-from .model_racedisplay import PlayerStatus
+from .model_racedisplay import PlayerStatus, Game
 from .singletons import settings, logger
+
+
+T = TypeVar('T', bound=BaseModel)
+
+
 
 
 class DbClient:
@@ -26,6 +33,7 @@ class DbClient:
         db = mongo_client[settings.database_name]
         self.raceevent_db = PyMongoClient(db["raceevent"])
         self.playerstatus_db = PyMongoClient(db["playerstatus"])
+        self.game_db = GenericDbClient[Game](db)
 
     def insert_raceevent(self, game_id:str, obj: RaceEvent, sha3_password = None) -> str:
         obj.game_id = game_id#for safety
@@ -60,8 +68,6 @@ class DbClient:
         return res and [_convert(x, PlayerStatus) for x in res]
 
     def insert_or_update_playerstatus(self, game_id:str, obj: EnterEvent) -> bool:
-        
-
         playerStatus = PlayerStatus(
             game_id = obj.game_id,
             user_id = obj.user_id,
@@ -110,6 +116,10 @@ class DbClient:
         res = self.playerstatus_db.find(query)
         return res and [_convert(x, PlayerStatus) for x in res]
 
+    def insert_game(self, obj: Game) -> str:
+        values = {**obj.dict(), "created_at": get_time(), "updated_at": get_time(), "class": type(obj).__name__}
+        return self.playerstatus_db.insert(values)
+
 
 class PyMongoClient:
     """Low-Level DB Client for pymongo (synchronous)"""
@@ -149,8 +159,54 @@ def _convert(obj: dict, cls: type):
     if obj is not None:
         obj["id"] = str(obj["_id"])
         del obj["_id"]
+        logger.info(cls.__name__)
         return cls(**obj)
 
+class GenericDbClient(Generic[T]):
+    db:PyMongoClient
+    cls:type
+
+    def __init__(self, mongo_client):
+        db = mongo_client[settings.database_name]
+        self.db = PyMongoClient(db[T.__name__])
+        logger.info("Generic class init: ")
+        logger.info(get_args(T))
+        self.cls = get_args(T)
+
+    def insert(self, obj:T) -> str:
+        values = {**obj.dict(), "created_at": get_time(), "updated_at": get_time(), "class": type(obj).__name__}
+        return self.db.insert(values)
+
+    def update(self, id_: str, obj: T) -> bool:
+        values = {**obj.dict(), "updated_at": get_time()}
+        return self.db.update(id_, values)
+
+    def delete(self, id_: str) -> bool:
+        return self.db.delete(id_)
+
+    def get(self, id_: str) -> Optional[T]:
+        res = self.db.get(id_)
+        return res and _convert(res, type(T))
+
+    def find(self, query:dict) -> Optional[List[str]]:
+        res = self.db.find(query)
+        if res is not None:
+            return [res['_id'] for x in res]
+
+    def find_and_get(self, query:dict) -> Optional[List[T]]:
+        res = self.db.find(query)
+        if res is not None:
+            return [_convert(x, type(T)) for x in res]
+
+    def find_one(self, query:dict) -> Optional[str]:
+        res = self.db.find_one(query)
+        if res is not None:
+            return res['_id']
+
+    def find_one_and_get(self, query:dict) -> Optional[T]:
+        res = self.db.find(query)
+        if res is not None:
+            return _convert(res, type(T))
 
 
 # Singleton instance
