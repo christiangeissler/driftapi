@@ -36,10 +36,10 @@ def app():
                     "game_id" : game_id,
                 }
                 #body = {}
-                result = fetch_post(f"{settings.driftapi_rootpath}/manage_game/create", body)
+                result = fetch_post(f"{settings.driftapi_root_path}/manage_game/create", body)
                 st.write(result)
 
-                result = fetch_post(f"{settings.driftapi_rootpath}/game/{game_id}/ping",{})
+                result = fetch_post(f"{settings.driftapi_root_path}/game/{game_id}/ping",{})
                 st.write(result)
 
                 time.sleep(5)
