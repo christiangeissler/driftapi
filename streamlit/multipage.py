@@ -3,6 +3,7 @@
 This file is the framework for generating multiple Streamlit applications 
 through an object oriented framework. 
 CODE by: https://towardsdatascience.com/creating-multipage-applications-using-streamlit-efficiently-b58a58134030
+Modified to use session states by: Christian Geißler (C) 2022
 """
 
 # Import necessary libraries 
@@ -31,4 +32,5 @@ class MultiPage:
 
     def run(self):           
         # run the app function 
+        #st.write(st.session_state)
         self.pages[st.session_state.nextpage]()

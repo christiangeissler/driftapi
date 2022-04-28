@@ -159,7 +159,6 @@ def _convert(obj: dict, cls: type):
     if obj is not None:
         obj["id"] = str(obj["_id"])
         del obj["_id"]
-        logger.info(cls.__name__)
         return cls(**obj)
 
 class GenericDbClient(Generic[T]):

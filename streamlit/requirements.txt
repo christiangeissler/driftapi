@@ -3,3 +3,4 @@ streamlit-aggrid
 pandas
 requests
 aiohttp[speedups]
+pydantic

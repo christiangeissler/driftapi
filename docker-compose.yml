@@ -7,6 +7,8 @@ services:
     build: ./streamlit
     depends_on:
       - driftapi-db
+    environment:
+      DRIFTAPI_ROOT_PATH: ${DRIFTAPI_ROOT_PATH}
     ports:
       - 8080:8080
 

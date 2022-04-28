@@ -23,51 +23,60 @@ async def root():
     return {"message": "Welcome to the Sturmkind Dr!ft Multiplayer Racing API. To see the available api calls, visit /docs."}
 
 # This event is triggered when a user enters a server uri in the app. The app can see if there actually is a server behind that uri and could for example show a green light, so that the user knows he entered the right server.
-@app.post("/game/{game_id}/ping")
+@app.post("/game/{game_id}/ping", status_code=200)
 async def ping(game_id:str, sha3_password: Optional[str] = None):
-    reply = {"status":True}
-    start_time = None
-    if start_time:
-        reply["start_time"] = start_time
-    return reply
+
+    result = db_client.game_db.find_one({"game_id":game_id})
+    if result:
+        reply = {"status":True}
+        start_time = None
+        if start_time:
+            reply["start_time"] = start_time
+        return reply
+    raise HTTPException(status_code=404, detail="Item not found")
+
 
 # This event is triggered when the user starts a run (free run, race, gymkhana) and after the loading is completed (the user sees the hud of the racer)
 # it's purpose is for the server to control the car setup and if that matches with what is allowed for the race
-@app.post("/game/{game_id}/events/enter")
+@app.post("/game/{game_id}/events/enter", status_code=201)
 async def create_EnterEvent(game_id:str, enterEvent:EnterEvent, sha3_password: Optional[str] = None):
     return db_client.insert_raceevent(game_id, enterEvent, sha3_password)
 
 # This event is triggered when the user hits the "Start Motor" button the first time.
-@app.post("/game/{game_id}/events/start")
+@app.post("/game/{game_id}/events/start", status_code=201)
 async def create_StartEvent(game_id:str, startEvent:StartEvent, sha3_password: Optional[str] = None):
     return db_client.insert_raceevent(game_id, startEvent, sha3_password)
 
 # This event is triggered whenever a target is recognized
-@app.post("/game/{game_id}/events/target")
+@app.post("/game/{game_id}/events/target", status_code=201)
 async def create_TargetEvent(game_id:str, targetEvent:TargetEvent, sha3_password: Optional[str] = None):
     return db_client.insert_raceevent(game_id, targetEvent, sha3_password)
 
 # This event is triggered whenever a player shuts down the motor and finishes the run
-@app.post("/game/{game_id}/events/end")
+@app.post("/game/{game_id}/events/end", status_code=201)
 async def create_EndEvent(game_id:str, endEvent:EndEvent, sha3_password: Optional[str] = None):
     return db_client.insert_raceevent(game_id, endEvent, sha3_password)
 
 if settings.enable_racedisplay:
 
     # This is a debug function that you can use to query for the created race events.
-    @app.put("/game/{game_id}/events")
+    @app.put("/game/{game_id}/events", status_code=200)
     async def get_Events(game_id:str, query:dict):
         query["game_id"]=game_id
         return db_client.find_raceevent(query)
 
-    @app.put("/game/{game_id}/")
+    @app.put("/game/{game_id}/", status_code=200)
     async def get_scoreboard(game_id:str):
-        return db_client.get_scoreboard(game_id)
+        result = db_client.get_scoreboard(game_id)
+        if result:
+            return result
+        raise HTTPException(status_code=404, detail="a game with that id was not found")
 
-    @app.post("/manage_game/create")
+    @app.post("/manage_game/create", status_code=201)
     async def create_game(game:Game):
         logger.info("create game")
-        logger.info(game)
+        if db_client.game_db.find_one({"game_id":game.game_id}):
+            raise HTTPException(status_code=409, detail="A game with that id already exists. Delete the game and then try again.")
         return db_client.game_db.insert(game)
 
     @app.post("/manage_game/delete/{game_id}")
@@ -76,6 +85,7 @@ if settings.enable_racedisplay:
         id = db_client.game_db.find_one(query)
         if id:
             return db_client.game_db.delete(id)
+        raise HTTPException(status_code=404, detail="Item not found")
 
     @app.post("/manage_game/find/")
     async def find_game(query:dict):
