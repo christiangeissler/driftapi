@@ -19,7 +19,7 @@ def app():
         st.experimental_rerun()
 
     st.write("Available games:")
-    result = fetch_post(f"{settings.driftapi_root_path}/manage_game/find/", {})
+    result = fetch_post(f"{settings.driftapi_path}/manage_game/find/", {})
     if result:
         result = pd.DataFrame( [{"game_id":r["game_id"]} for r in result if ("game_id" in r.keys())] )
         st.write(result)
