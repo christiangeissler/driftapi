@@ -19,7 +19,7 @@ def app():
 
     if 'game_id' not in st.session_state:
         with st.form("my_form"):
-            result = fetch_post(f"{settings.driftapi_root_path}/manage_game/find/", {})
+            result = fetch_post(f"{settings.database_path}/manage_game/find/", {})
             if result:
                 result = [r["game_id"] for r in result if ("game_id" in r.keys())]
                 game_id = st.selectbox(label="Choose Game", options=result)
@@ -33,11 +33,11 @@ def app():
 
         future = st.empty()
 
-        result = fetch_post(f"{settings.driftapi_root_path}/game/{game_id}/ping", {})
+        result = fetch_post(f"{settings.database_path}/game/{game_id}/ping", {})
         
         if result:
             while True:
-                result = fetch_put(f"{settings.driftapi_root_path}/game/{game_id}/", {})
+                result = fetch_put(f"{settings.database_path}/game/{game_id}/", {})
                 if result:
                     with future.container():
                         toBeDisplayedData = pd.DataFrame( [{"username":r["user_name"], "best lap":r["best_lap"], "laps":r["laps_completed"]} for r in result if ("user_name" in r.keys())] )
