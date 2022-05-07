@@ -67,7 +67,7 @@ class StartData(BaseModel):
     signal_time:datetime
 
 class TargetData(BaseModel):
-    time: datetime
+    crossing_time: datetime
     data: target_code
     false_start: bool
     driven_distance:float

@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+from datetime import timedelta
 import pandas as pd 
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
@@ -40,8 +41,10 @@ def app():
                 result = fetch_put(f"{settings.driftapi_path}/game/{game_id}/", {})
                 if result:
                     with future.container():
-                        toBeDisplayedData = pd.DataFrame( [{"username":r["user_name"], "best lap":r["best_lap"], "laps":r["laps_completed"]} for r in result if ("user_name" in r.keys())] )
+                        
+                        toBeDisplayedData = pd.DataFrame( [{"Spieler":r["user_name"], "Beste Runde[s]":r["best_lap"], "Letzte Runde[s]":r["last_lap"], "Runden":r["laps_completed"], "Punkte":r["total_points"]} for r in result if (type(r) is dict) and ("user_name" in r.keys())] )
                         st.dataframe(toBeDisplayedData)
+                        #AgGrid(toBeDisplayedData)
                 else:
                     with future.container():
                         st.write("Waiting for players to join...")

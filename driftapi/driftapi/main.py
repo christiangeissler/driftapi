@@ -50,7 +50,7 @@ async def create_StartEvent(game_id:str, startEvent:StartEvent, sha3_password: O
 # This event is triggered whenever a target is recognized
 @app.post("/game/{game_id}/events/target", status_code=201)
 async def create_TargetEvent(game_id:str, targetEvent:TargetEvent, sha3_password: Optional[str] = None):
-    return db_client.insert_raceevent(game_id, targetEvent, sha3_password)
+    return db_client.insert_raceevent(game_id, startEvent, sha3_password)
 
 # This event is triggered whenever a player shuts down the motor and finishes the run
 @app.post("/game/{game_id}/events/end", status_code=201)
@@ -67,7 +67,7 @@ if settings.enable_racedisplay:
 
     @app.put("/game/{game_id}/", status_code=200)
     async def get_scoreboard(game_id:str):
-        result = db_client.get_scoreboard(game_id)
+        result = db_client.playerstatus_db.find_and_get(query={'game_id':game_id})
         if result:
             return result
         raise HTTPException(status_code=404, detail="a game with that id was not found")

@@ -68,6 +68,8 @@ in the root directory of the project (the one containing the docker-compose.yml 
 
 After that, visit localhost:8080 to see the scoreboard or localhost:8001/docs to view the api.
 
+Note: The correct uri for the drift-app to enter stuff is <ip of the host>:8080/game/<game_id>, use "ifconfig" on unix or "ipconfig" on windows shell to get the ip of the host.
+
 # using this code
 After running, a local webserver should be open and accessible via a webbrowser entering "localhost:8001". A small welcome message should appear. Go to /docs to browse the interface description. You can also download an openapi.json description of the interface that can be used in code-generators etc. to generate a server stub implementing this interface.
 
