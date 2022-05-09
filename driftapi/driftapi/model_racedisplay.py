@@ -11,6 +11,7 @@ from time import time
 from typing import Optional
 from uuid import UUID
 from datetime import datetime, timedelta
+from .model import track_condition, track_bundle, wheels, setup_mode
 
 
 class Game(BaseModel):
@@ -23,6 +24,11 @@ class Game(BaseModel):
     time_limit:Optional[float] = Field(None, title="the time limit for the run, in seconds")
     lap_count:Optional[int] = Field(None, title="number of rounds (for the race mode)")
     #future: add more conditions (race conditions)
+    
+    track_condition:Optional[track_condition]
+    track_bundle:Optional[track_bundle]
+    wheels:Optional[wheels]
+    setup_mode:Optional[setup_mode]
 
 
 

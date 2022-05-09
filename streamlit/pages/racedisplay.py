@@ -2,10 +2,35 @@ import streamlit as st
 import time
 from datetime import timedelta
 import pandas as pd 
+import numpy as np
+import qrcode
+from PIL import Image
 from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
-from  .session import fetch_post, fetch_put
-from .singletons import settings
+from  .session import fetch_post, fetch_put, fetch_get
+from .singletons import settings, logger
+
+@st.cache
+def getqrcode(content):
+    logger.info("create qr code")
+    logger.info(content)
+
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4
+    )
+    qr.add_data(content)
+    qr.make(fit=True)
+    img = qr.make_image(fill_color="white", back_color="#212529")
+    #img = np.asarray(img)
+    #logger.info(str(img.shape))
+    logger.info(str(img))
+    img.save('./qrcode_test.png')
+    return Image.open('./qrcode_test.png')
+
+    
 
 
 
@@ -24,17 +49,21 @@ def app():
             if result:
                 result = [r["game_id"] for r in result if ("game_id" in r.keys())]
                 game_id = st.selectbox(label="Choose Game", options=result)
-                submitted = st.form_submit_button("Show")
-
-                if submitted:
+                if st.form_submit_button("Show"):
                     st.session_state.game_id = game_id
                     st.experimental_rerun()
     else:
         game_id = st.session_state.game_id
-
         future = st.empty()
+        
+        with st.expander("Connection info", expanded=False):
+            submitUri:str = settings.hostname+":8001/game/"
+            st.image(getqrcode(submitUri + game_id), clamp=True)
+            st.write("URL: "+submitUri)
+            st.write("GAME ID: "+game_id)
+        
 
-        result = fetch_post(f"{settings.driftapi_path}/game/{game_id}/ping", {})
+        result = fetch_get(f"{settings.driftapi_path}/game/{game_id}/ping")
         
         if result:
             while True:
@@ -49,6 +78,7 @@ def app():
                     with future.container():
                         st.write("Waiting for players to join...")
                         #st.error("Error")
+
                 time.sleep(5)
         else:
             with future.container():

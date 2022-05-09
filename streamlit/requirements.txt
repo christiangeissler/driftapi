@@ -1,6 +1,9 @@
 streamlit
 streamlit-aggrid
 pandas
+numpy
 requests
 aiohttp[speedups]
 pydantic
+pillow
+qrcode[pil]

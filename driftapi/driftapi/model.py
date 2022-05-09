@@ -51,7 +51,6 @@ class target_code(str, Enum):
 class EnterData(BaseModel):
     game_mode: game_mode
     start_time: datetime
-    time_limit: float = Field(None, title="the time limit for the run, in seconds")
     lap_count: int = Field(None, title="number of rounds (for the race mode)")
     track_condition: track_condition
     track_bundle: track_bundle
@@ -60,15 +59,15 @@ class EnterData(BaseModel):
     engine_type: str = Field(None, title="The id of the motor type. No ENUM for the above reason. Example: 'DTM', 'V8' etc.") 
     tuning_type: str = Field(None, title="The id of the motor setup. No ENUM for the above reason. Example: 'DTM', 'V8' etc.")  #according to the app-internal id for the different motor setups. No ENUM for the above reason.
     steering_angle: float = Field(None, title="the choosen steering angle as set in the settings menue of the app")
-    driftassist:bool = Field(None, title="if driftassist is enabled in the settings menue of the app.")
     softsteering:bool = Field(None, title="if softsteering is enabled in the settings menue of the app.")
+    driftassist:bool = Field(None, title="if driftassist is enabled in the settings menue of the app.")
 
 class StartData(BaseModel):
-    signal_time:datetime
+    signal_time:datetime = Field(None, title="The actual time if the signal lamp shows the green light.")
 
 class TargetData(BaseModel):
     crossing_time: datetime
-    data: target_code
+    target_code: target_code
     false_start: bool
     driven_distance:float
     driven_time:float
@@ -76,10 +75,10 @@ class TargetData(BaseModel):
 
 class EndData(BaseModel):
     finished_time: datetime
-    total_score: int
     false_start: bool
-    driven_distance: float
-    driven_time: float
+    total_score: int
+    total_driven_distance: float
+    total_driven_time: float
 
 
 class RaceEvent(BaseModel):

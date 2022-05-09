@@ -23,37 +23,40 @@ async def root():
     return {"message": "Welcome to the Sturmkind Dr!ft Multiplayer Racing API. To see the available api calls, visit /docs."}
 
 # This event is triggered when a user enters a server uri in the app. The app can see if there actually is a server behind that uri and could for example show a green light, so that the user knows he entered the right server.
-@app.post("/game/{game_id}/ping", status_code=200)
+@app.get("/game/{game_id}/ping", status_code=200)
 async def ping(game_id:str, sha3_password: Optional[str] = None):
 
-    result = db_client.game_db.find_one({"game_id":game_id})
-    if result:
-        reply = {"status":True}
-        start_time = None
-        if start_time:
-            reply["start_time"] = start_time
+    game = db_client.game_db.find_one_and_get({"game_id":game_id})
+    if game:
+        reply = {"status": True}
+        if game.start_time: reply["start_time"] = game.start_time
+        if game.lap_count: reply["lap_count"] = game.lap_count
+        if game.track_condition: reply["track_condition"] = game.track_condition
+        if game.track_bundle: reply["track_bundle"] = game.track_bundle
+        if game.wheels: reply["wheels"] = game.wheels
+        if game.setup_mode: reply["setup_mode"] = game.setup_mode
         return reply
     raise HTTPException(status_code=404, detail="Item not found")
 
 
 # This event is triggered when the user starts a run (free run, race, gymkhana) and after the loading is completed (the user sees the hud of the racer)
 # it's purpose is for the server to control the car setup and if that matches with what is allowed for the race
-@app.post("/game/{game_id}/events/enter", status_code=201)
+@app.post("/game/{game_id}/enter", status_code=201)
 async def create_EnterEvent(game_id:str, enterEvent:EnterEvent, sha3_password: Optional[str] = None):
     return db_client.insert_raceevent(game_id, enterEvent, sha3_password)
 
 # This event is triggered when the user hits the "Start Motor" button the first time.
-@app.post("/game/{game_id}/events/start", status_code=201)
+@app.post("/game/{game_id}/start", status_code=201)
 async def create_StartEvent(game_id:str, startEvent:StartEvent, sha3_password: Optional[str] = None):
     return db_client.insert_raceevent(game_id, startEvent, sha3_password)
 
 # This event is triggered whenever a target is recognized
-@app.post("/game/{game_id}/events/target", status_code=201)
+@app.post("/game/{game_id}/target", status_code=201)
 async def create_TargetEvent(game_id:str, targetEvent:TargetEvent, sha3_password: Optional[str] = None):
-    return db_client.insert_raceevent(game_id, startEvent, sha3_password)
+    return db_client.insert_raceevent(game_id, targetEvent, sha3_password)
 
 # This event is triggered whenever a player shuts down the motor and finishes the run
-@app.post("/game/{game_id}/events/end", status_code=201)
+@app.post("/game/{game_id}/end", status_code=201)
 async def create_EndEvent(game_id:str, endEvent:EndEvent, sha3_password: Optional[str] = None):
     return db_client.insert_raceevent(game_id, endEvent, sha3_password)
 

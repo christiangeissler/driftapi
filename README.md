@@ -58,7 +58,7 @@ Make sure that docker (https://www.docker.com/products/docker-desktop/) is insta
 
 After cloning the repository, you can startup the service by running
 
-docker compose up --build
+docker compose --profile racedisplay up --build
 
 in the root directory of the project (the one containing the docker-compose.yml file). This will build and then start three containers:
 

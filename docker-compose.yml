@@ -12,6 +12,8 @@ services:
       STREAMLIT_SERVER_PORT: ${STREAMLIT_SERVER_PORT}
     ports:
       - 8080:8080
+    profiles:
+      - racedisplay
 
   driftapi-service:
     image: driftapi-service

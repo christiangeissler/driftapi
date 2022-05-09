@@ -24,6 +24,13 @@ def fetch_post(url, body):
     except Exception:
         return {}
 
+def fetch_get(url):
+    logger.info("post: "+str(url))
+    try:
+        result = session.get(url, headers = headers)           
+        return result.json()
+    except Exception:
+        return {}
 
 
 
