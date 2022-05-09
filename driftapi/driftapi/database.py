@@ -48,7 +48,7 @@ class DbClient:
             playerStatusId = self.playerstatus_db.find_one({'game_id':game_id, 'user_id':obj.user_id})
             playerStatus = self.playerstatus_db.get(playerStatusId)
 
-            if obj.data.data == target_code.start_finish:
+            if obj.data.target_code == target_code.start_finish:
                 if playerStatus.last_lap_timestamp:
                     playerStatus.laps_completed += 1 #only add a lap after the start line has been crossed the second time
 

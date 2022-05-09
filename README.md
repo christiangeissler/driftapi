@@ -23,13 +23,14 @@ Where "https://driftevent.de/racingserver" is the root where the service runs, a
 In the beginning, this uri will be entered manually in the app, at a future stage, a QR-Code reader could be used to set it more convenient.
 
 ## 2nd Step ## (Optional)
-After setting the uri, the app can call the following uri to check if it is correct and a service is running on the other side.
+After setting the uri, the app can call the following uri to check if it is correct and a service is running on the other side. This will also return the race settings that then will be used as preset in the drift-app.
+
 https://driftevent.de/racingserver/game/race143/ping
 
 ## 3rd Step ##
 Then, the user just starts a normal race/gymkhana/free run as usual. Upon entering the game but before the user starts the motor, the drift app in our example can call
 
-https://driftevent.de/racingserver/game/race143/events/enter
+https://driftevent.de/racingserver/game/race143/enter
 
 to submit the car and race settings as well as the user name that can be displayed on a score board. For legal / privacy reasons, this choosen user name does not need to be identical with the sturmkind user name.
 
@@ -37,12 +38,12 @@ Note: All the calls to /events/* require a timestamp (down to fractions of secon
 
 ## 4th Step ##
 When the player starts the motor of the car, the drift app in our example calls
-https://driftevent.de/racingserver/game/race143/events/start
+https://driftevent.de/racingserver/game/race143/start
 
 ## 5th Step ##
 Whenever the app recognizes that a barcode has been detected, it calls 
 
-https://driftevent.de/racingserver/game/race143/events/target
+https://driftevent.de/racingserver/game/race143/target
 
 See the api documentation for the required body. This tells the server when and which barcode has been crossed, which allows for counting laps, lap times etc.
 This is the most important API call. Note: for now, no further information that that is passed, maybe in the future, also the speed and drift angle might get submitted as well.
@@ -50,7 +51,7 @@ This is the most important API call. Note: for now, no further information that 
 ## 6th Step ##
 When the user stops the motor (and therefore, finishes the run), the app send the finish information to the api.
 
-https://driftevent.de/racingserver/game/race143/events/end
+https://driftevent.de/racingserver/game/race143/end
 
 
 # installation
@@ -64,7 +65,7 @@ in the root directory of the project (the one containing the docker-compose.yml 
 
 1) a MongoDB server running a database
 2) the fastapi server with the driftapi and the backend logic
-3) a streamlit server that offers the scoreboard.
+3) a streamlit server that offers the scoreboard (the racedisplay service)
 
 After that, visit localhost:8080 to see the scoreboard or localhost:8001/docs to view the api.
 
