@@ -124,9 +124,10 @@ def app():
                 if setup_mode_enabled:
                     body['setup_mode'] = str(setup_mode_selected)
 
+                '''
                 if joker_lap_enabled:
                     body['joker_lap_code'] = joker_lap_code
-
+                '''
                 #body = {}
                 result = fetch_post(f"{settings.driftapi_path}/manage_game/create", body)
                 

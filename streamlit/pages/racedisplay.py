@@ -80,7 +80,7 @@ def app():
                         st.write("Waiting for players to join...")
                         #st.error("Error")
 
-                time.sleep(5)
+                time.sleep(2)
         else:
             with future.container():
                 st.error("No Game with that id exists, going back to main menue...")
