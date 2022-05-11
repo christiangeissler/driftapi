@@ -6,8 +6,19 @@ import streamlit as st
 from multipage import MultiPage
 from pages import mainpage, creategame, racedisplay # import your pages here
 
+def _max_width_(prcnt_width:int = 75):
+    max_width_str = f"max-width: {prcnt_width}%;"
+    st.markdown(f""" 
+                <style> 
+                .reportview-container .main .block-container{{{max_width_str}}}
+                </style>    
+                """, 
+                unsafe_allow_html=True,
+    )
+
 if __name__ == '__main__':
     # Create an instance of the app 
+    _max_width_(75)
     app = MultiPage()
 
     # Title of the main page

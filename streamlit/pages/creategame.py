@@ -84,15 +84,15 @@ def app():
                     setup_mode_enabled = st.checkbox("Enable setup mode", value=False, key=None, help=None, on_change=None)
                 with columnRight:
                     setup_mode_selected = st.selectbox(label="setup mode", options=[e.value for e in setup_mode])
-            '''
+
             with st.container():
                 columnLeft, columnRight = st.columns(2)
                 with columnLeft:
                     joker_lap_enabled = st.checkbox("Enable Joker Lap Counter", value=False, key=None, help=None, on_change=None)
                 with columnRight:
                     options = {"angle drift":target_code.angle_drift, "360":target_code.threesixty, "180 speed":target_code.oneeighty, "speed drift":target_code.speed_drift}
-                    joker_lap_code = str(options[st.selectbox(label="Code to be used for joker lap", options=[*options])])
-            ''' 
+                    joker_lap_code = str(options[st.selectbox(label="Code to be used for joker lap", options=[*options])].value)
+
 
 
         submitted = st.form_submit_button("Create")
@@ -124,13 +124,13 @@ def app():
                 if setup_mode_enabled:
                     body['setup_mode'] = str(setup_mode_selected)
 
-                '''
+
                 if joker_lap_enabled:
-                    body['joker_lap_code'] = joker_lap_code
-                '''
-                #body = {}
+                    body['joker_lap_code'] = str(joker_lap_code)
+
+                st.write(body)
+                time.sleep(5)
                 result = fetch_post(f"{settings.driftapi_path}/manage_game/create", body)
-                
 
                 if result:
                     st.success("Race has been created")
