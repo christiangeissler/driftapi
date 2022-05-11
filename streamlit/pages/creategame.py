@@ -128,8 +128,6 @@ def app():
                 if joker_lap_enabled:
                     body['joker_lap_code'] = str(joker_lap_code)
 
-                st.write(body)
-                time.sleep(5)
                 result = fetch_post(f"{settings.driftapi_path}/manage_game/create", body)
 
                 if result:

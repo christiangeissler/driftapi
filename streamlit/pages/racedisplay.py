@@ -32,7 +32,15 @@ def getqrcode(content):
     return Image.open('./qrcode_test.png')
 
 
+def getGameInfo(game_id):
+    return fetch_get(f"{settings.driftapi_path}/manage_game/get/{game_id}/")
+
+def getScoreBoard(game_id):
+    return fetch_get(f"{settings.driftapi_path}/game/{game_id}/playerstatus")
+
 def app():
+
+    game_id = st.session_state.game_id
 
     st.markdown(
         f"""
@@ -53,86 +61,68 @@ def app():
         st.session_state.nextpage = "main_page"
         st.experimental_rerun()
 
-    game_id = ""
+    game = getGameInfo(game_id)
 
+    if not game:
+        st.error("No Game with that id exists, going back to main menue...")
+        time.sleep(1)
+        st.session_state.nextpage = "main_page"
+        st.experimental_rerun()
 
-    if 'game_id' not in st.session_state:
-        with st.form("my_form"):
-            result = fetch_post(f"{settings.driftapi_path}/manage_game/find/", {})
-            if result:
-                result = [r["game_id"] for r in result if ("game_id" in r.keys())]
-                game_id = st.selectbox(label="Choose Game", options=result)
-                if st.form_submit_button("Show"):
-                    st.session_state.game_id = game_id
-                    st.experimental_rerun()
+    joker_lap_code = None
+    if game:
+        if "joker_lap_code" in game:
+            joker_lap_code = game["joker_lap_code"]
+
+    scoreboard = getScoreBoard(game_id)
+
+    if scoreboard:
+        # CSS to inject contained in a string
+        hide_dataframe_row_index = """
+                    <style>
+                    .row_heading.level0 {display:none}
+                    .blank {display:none}
+                    </style>
+        """
+        # Inject CSS with Markdown
+        st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
+
+        def constructEntry(r:dict):
+            d = {
+                "Spieler":r["user_name"] if "user_name" in r else "",
+                "Beste Runde[s]":r["best_lap"] if "best_lap" in r else None,
+                "Letzte Runde[s]":r["last_lap"] if "last_lap" in r else None,
+                "Runden":r["laps_completed"] if "laps_completed" in r else 0,
+                "Punkte":r["total_score"] if "total_score" in r else 0,
+                "Gesamtzeit":r["total_time"] if "total_time" in r else "",
+            }
+
+            if joker_lap_code:
+                d["Joker Laps"] = str(r["target_code_counter"][str(joker_lap_code)]) if "target_code_counter" in r else "0"
+
+            return d
+
+        scoreboard = [constructEntry(r) for r in scoreboard if (type(r) is dict)]
+        #if there is no entry, just add an empty one by calling the construct Entry with an empty dict
+        while len(scoreboard)<20:
+            scoreboard.append(constructEntry({}))
+        df = pd.DataFrame( scoreboard )
+        st.dataframe(df)
+        #st.dataframe(df, width=1600, height = 20*len(scoreboard))
+        #AgGrid(df)
     else:
-        game_id = st.session_state.game_id
-        future = st.empty()
-        joker_lap_code = None
-
-        with st.expander("Game Settings", expanded = False):
-            result = fetch_get(f"{settings.driftapi_path}/manage_game/get/{game_id}/")
-            if result:
-                if "joker_lap_code" in result:
-                    joker_lap_code = result["joker_lap_code"]
-                st.write(result)
-        
-        with st.expander("Connection info", expanded=False):
-            submitUri:str = "http://"+settings.hostname+":8001/game"
-            st.image(getqrcode(submitUri), clamp=True)
-            st.write("URL: "+submitUri)
-            st.write("GAME ID: "+game_id)
-
-        result = fetch_get(f"{settings.driftapi_path}/game/{game_id}/ping")
-        
-        if result:
-            result = fetch_get(f"{settings.driftapi_path}/game/{game_id}/playerstatus")
-            if result:
-                 while True:
-                    with future.container():
-
-                        # CSS to inject contained in a string
-                        hide_dataframe_row_index = """
-                                    <style>
-                                    .row_heading.level0 {display:none}
-                                    .blank {display:none}
-                                    </style>
-                        """
-                        # Inject CSS with Markdown
-                        st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
-
-                        def constructEntry(r:dict):
-                            d = {
-                                "Spieler":r["user_name"] if "user_name" in r else "",
-                                "Beste Runde[s]":r["best_lap"] if "best_lap" in r else None,
-                                "Letzte Runde[s]":r["last_lap"] if "last_lap" in r else None,
-                                "Runden":r["laps_completed"] if "laps_completed" in r else 0,
-                                "Punkte":r["total_score"] if "total_score" in r else 0,
-                                "Gesamtzeit":r["total_time"] if "total_time" in r else "",
-                            }
-
-                            if joker_lap_code:
-                                d["Joker Laps"] = str(r["target_code_counter"][str(joker_lap_code)]) if "target_code_counter" in r else "0"
-
-                            return d
-
-                        result = [constructEntry(r) for r in result if (type(r) is dict)]
-                        #if there is no entry, just add an empty one by calling the construct Entry with an empty dict
-                        while len(result)<20:
-                            result.append(constructEntry({}))
-                        df = pd.DataFrame( result )
-                        st.dataframe(df, width=1600, height = 20*len(result))
-                        #AgGrid(toBeDisplayedData)
-                        time.sleep(2)
-            else:
-                with future.container():
-                    st.write("uuups... unexpected result from server")
-                    #st.error("Error")
-        else:
-            with future.container():
-                st.error("No Game with that id exists, going back to main menue...")
-                time.sleep(1)
-                st.session_state.nextpage = "main_page"
-                st.experimental_rerun()
+        st.write("uuups... unexpected result from server")
+        #st.error("Error")
 
 
+    with st.expander("Game Settings", expanded = False):
+        st.write(game)
+
+    with st.expander("Connection info", expanded=False):
+        submitUri:str = "http://"+settings.hostname+":8001/game"
+        st.image(getqrcode(submitUri), clamp=True)
+        st.write("URL: "+submitUri)
+        st.write("GAME ID: "+game_id)
+
+    time.sleep(2)
+    st.experimental_rerun()

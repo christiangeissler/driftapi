@@ -15,7 +15,7 @@ def app():
         st.experimental_rerun()
 
     if st.button("Show Game"):
-        st.session_state.nextpage = "racedisplay"
+        st.session_state.nextpage = "select_race"
         st.experimental_rerun()
 
     st.write("Available games:")

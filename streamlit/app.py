@@ -1,10 +1,8 @@
 import streamlit as st
 
-
-
 # Custom imports 
 from multipage import MultiPage
-from pages import mainpage, creategame, racedisplay # import your pages here
+from pages import mainpage, creategame, select_race, racedisplay # import your pages here
 
 def _max_width_(prcnt_width:int = 75):
     max_width_str = f"max-width: {prcnt_width}%;"
@@ -18,15 +16,16 @@ def _max_width_(prcnt_width:int = 75):
 
 if __name__ == '__main__':
     # Create an instance of the app 
-    _max_width_(75)
+    #st.set_page_config(layout="wide")
+    _max_width_(90)
     app = MultiPage()
-
     # Title of the main page
     st.title("Drift Racedisplay Prototype")
 
     # Add all your applications (pages) here
     app.add_page("main_page", mainpage.app)
     app.add_page("create_game", creategame.app)
+    app.add_page("select_race", select_race.app)
     app.add_page("racedisplay", racedisplay.app)
 
     print(app.pages)
