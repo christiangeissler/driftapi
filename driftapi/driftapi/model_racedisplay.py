@@ -11,7 +11,7 @@ from time import time
 from typing import Optional
 from uuid import UUID
 from datetime import datetime, timedelta
-from .model import track_condition, track_bundle, wheels, setup_mode
+from .model import track_condition, track_bundle, wheels, setup_mode, EnterData, StartData, EndData
 
 
 class Game(BaseModel):
@@ -30,6 +30,11 @@ class Game(BaseModel):
     wheels:Optional[wheels]
     setup_mode:Optional[setup_mode]
 
+    joker_lap_code:Optional[int] = Field(None, title="if set, this target code counter is displayed to be used for joker-laps etc.")
+
+
+
+
 
 
 
@@ -39,7 +44,13 @@ class PlayerStatus(BaseModel):
     user_id:UUID
     user_name:str
     laps_completed:int
-    total_points:Optional[int]
+    total_score:Optional[int]
+    total_time:Optional[str]
     best_lap:Optional[str]
     last_lap:Optional[str]
     last_lap_timestamp:Optional[datetime]
+    target_code_counter:dict
+    enter_data:Optional[EnterData]
+    start_data:Optional[StartData]
+    end_data:Optional[EndData]
+

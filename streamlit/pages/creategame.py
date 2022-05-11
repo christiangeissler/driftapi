@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 import json
 from  .session import fetch_post, fetch_put
 from .singletons import settings
-from .model import track_condition, track_bundle, wheels, setup_mode
+from .model import track_condition, track_bundle, wheels, setup_mode, target_code
 
 
 def createGameOptionContainer(label:str, options:Enum):
@@ -38,8 +38,8 @@ def app():
                     start_time_enabled = st.checkbox("Enable start time", value=False, key=None, help=None, on_change=None)
                 with columnRight:
                     start_time = st.time_input('Start time (Local)', value=datetime.now(), key=None, help=None, on_change=None, disabled = False)
-                start_time = datetime.combine(datetime.today(), start_time)
-                start_time = start_time.astimezone(timezone.utc)
+                    start_time = datetime.combine(datetime.today(), start_time)
+                    start_time = start_time.astimezone(timezone.utc)
 
 
             with st.container():
@@ -57,10 +57,43 @@ def app():
                 with columnRight:
                     lap_count = st.number_input("laps", min_value=0, max_value=100, value=20, step=1, format=None, key=None, help="number of laps", on_change=None, disabled = False)
 
-            gameOptions.update(createGameOptionContainer("track condition", track_condition))
-            gameOptions.update(createGameOptionContainer("track bundle", track_bundle))
-            gameOptions.update(createGameOptionContainer("wheels", wheels))
-            gameOptions.update(createGameOptionContainer("setup mode", setup_mode))
+            with st.container():
+                columnLeft, columnRight = st.columns(2)
+                with columnLeft:
+                   track_condition_enabled = st.checkbox("Enable track condition", value=False, key=None, help=None, on_change=None)
+                with columnRight:
+                   track_condition_selected = st.selectbox(label="track condition", options=[e.value for e in track_condition])
+
+            with st.container():
+                columnLeft, columnRight = st.columns(2)
+                with columnLeft:
+                    track_bundle_enabled = st.checkbox("Enable track bundle", value=False, key=None, help=None, on_change=None)
+                with columnRight:
+                    track_bundle_selected = st.selectbox(label="track bundle", options=[e.value for e in track_bundle])
+
+            with st.container():
+                columnLeft, columnRight = st.columns(2)
+                with columnLeft:
+                    wheels_enabled = st.checkbox("Enable wheels", value=False, key=None, help=None, on_change=None)
+                with columnRight:
+                    wheels_selected = st.selectbox(label="wheels", options=[e.value for e in wheels])
+
+            with st.container():
+                columnLeft, columnRight = st.columns(2)
+                with columnLeft:
+                    setup_mode_enabled = st.checkbox("Enable setup mode", value=False, key=None, help=None, on_change=None)
+                with columnRight:
+                    setup_mode_selected = st.selectbox(label="setup mode", options=[e.value for e in setup_mode])
+            '''
+            with st.container():
+                columnLeft, columnRight = st.columns(2)
+                with columnLeft:
+                    joker_lap_enabled = st.checkbox("Enable Joker Lap Counter", value=False, key=None, help=None, on_change=None)
+                with columnRight:
+                    options = {"angle drift":target_code.angle_drift, "360":target_code.threesixty, "180 speed":target_code.oneeighty, "speed drift":target_code.speed_drift}
+                    joker_lap_code = str(options[st.selectbox(label="Code to be used for joker lap", options=[*options])])
+            ''' 
+
 
         submitted = st.form_submit_button("Create")
 
@@ -70,8 +103,6 @@ def app():
                     "track_id" : track_id,
                 }
 
-                body.update(gameOptions)
-
                 if start_time_enabled:
                     body['start_time'] = str(start_time)
 
@@ -80,6 +111,21 @@ def app():
 
                 if lap_limit_enabled:
                     body['lap_count'] = str(lap_count)
+
+                if track_condition_enabled:
+                    body['track_condition'] = str(track_condition_selected)
+
+                if track_bundle_enabled:
+                    body['track_bundle'] = str(track_bundle_selected)
+
+                if wheels_enabled:
+                    body['wheels'] = str(wheels_selected)
+
+                if setup_mode_enabled:
+                    body['setup_mode'] = str(setup_mode_selected)
+
+                if joker_lap_enabled:
+                    body['joker_lap_code'] = joker_lap_code
 
                 #body = {}
                 result = fetch_post(f"{settings.driftapi_path}/manage_game/create", body)

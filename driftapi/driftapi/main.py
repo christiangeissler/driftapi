@@ -68,7 +68,7 @@ if settings.enable_racedisplay:
         query["game_id"]=game_id
         return db_client.find_raceevent(query)
 
-    @app.put("/game/{game_id}/", status_code=200)
+    @app.get("/game/{game_id}/playerstatus", status_code=200)
     async def get_scoreboard(game_id:str):
         result = db_client.playerstatus_db.find_and_get(query={'game_id':game_id})
         if result:
@@ -89,6 +89,10 @@ if settings.enable_racedisplay:
         if id:
             return db_client.game_db.delete(id)
         raise HTTPException(status_code=404, detail="Item not found")
+
+    @app.get("/manage_game/get/{game_id}/", status_code=200)
+    async def get_game(game_id:str):
+        return db_client.game_db.find_one_and_get(query = {"game_id":game_id})
 
     @app.post("/manage_game/find/")
     async def find_game(query:dict):

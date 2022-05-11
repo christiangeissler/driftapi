@@ -1,5 +1,6 @@
 import streamlit as st
 import time
+import base64
 from datetime import timedelta
 import pandas as pd 
 import numpy as np
@@ -30,9 +31,6 @@ def getqrcode(content):
     img.save('./qrcode_test.png')
     return Image.open('./qrcode_test.png')
 
-    
-
-
 
 def app():
 
@@ -55,23 +53,26 @@ def app():
     else:
         game_id = st.session_state.game_id
         future = st.empty()
+
+        with st.expander("Game Settings", expanded = False):
+            result = fetch_get(f"{settings.driftapi_path}/manage_game/get/{game_id}/")
+            st.write(result)
         
         with st.expander("Connection info", expanded=False):
-            submitUri:str = settings.hostname+":8001/game/"
-            st.image(getqrcode(submitUri + game_id), clamp=True)
+            submitUri:str = settings.hostname+":8001/game"
+            st.image(getqrcode(submitUri), clamp=True)
             st.write("URL: "+submitUri)
             st.write("GAME ID: "+game_id)
-        
 
         result = fetch_get(f"{settings.driftapi_path}/game/{game_id}/ping")
         
         if result:
             while True:
-                result = fetch_put(f"{settings.driftapi_path}/game/{game_id}/", {})
+                result = fetch_get(f"{settings.driftapi_path}/game/{game_id}/playerstatus")
                 if result:
                     with future.container():
-                        
-                        toBeDisplayedData = pd.DataFrame( [{"Spieler":r["user_name"], "Beste Runde[s]":r["best_lap"], "Letzte Runde[s]":r["last_lap"], "Runden":r["laps_completed"], "Punkte":r["total_points"]} for r in result if (type(r) is dict) and ("user_name" in r.keys())] )
+                        #"Targets":str(r["target_code_counter"])
+                        toBeDisplayedData = pd.DataFrame( [{"Spieler":r["user_name"], "Beste Runde[s]":r["best_lap"], "Letzte Runde[s]":r["last_lap"], "Runden":r["laps_completed"], "Punkte":r["total_score"], "Gesamtzeit":r["total_time"]} for r in result if (type(r) is dict) and ("user_name" in r.keys())] )
                         st.dataframe(toBeDisplayedData)
                         #AgGrid(toBeDisplayedData)
                 else:
@@ -86,6 +87,5 @@ def app():
                 time.sleep(1)
                 st.session_state.nextpage = "main_page"
                 st.experimental_rerun()
-
 
 
