@@ -1,5 +1,0 @@
-time limit ist rausgeflogen
-
-sehe ich das richtig, dass man über PING der App Presets übermitteln kann? (-> sehr cool)
-
-Startampel: Ich sehe jetzt wie die Startampel funktioniert, finde ich gut. Da könnte man später auch noch externe Startampeln (Hardware) anbinden. Würde ich aber erst mal nur als Idee im Hinterkopf behalten.

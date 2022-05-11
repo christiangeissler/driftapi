@@ -48,6 +48,9 @@ class DbClient:
             playerStatusId = self.playerstatus_db.find_one({'game_id':game_id, 'user_id':obj.user_id})
             playerStatus = self.playerstatus_db.get(playerStatusId)
 
+            #increase the target code counter by one (for tracking the number of targets that had been passed)
+            playerStatus.target_code_counter[str(obj.data.target_code.value)]+=1
+
             if obj.data.target_code == target_code.start_finish:
                 if playerStatus.last_lap_timestamp:
                     playerStatus.laps_completed += 1 #only add a lap after the start line has been crossed the second time
@@ -62,9 +65,28 @@ class DbClient:
                         playerStatus.best_lap = str(new_lap_time.total_seconds())
                 playerStatus.last_lap_timestamp = obj.data.crossing_time
             if obj.data.score>0:
-                playerStatus.total_points += obj.data.score
+                playerStatus.total_score += obj.data.score
         
             self.playerstatus_db.update(playerStatusId, playerStatus)
+        elif eventType is StartEvent:
+            playerStatusId = self.playerstatus_db.find_one({'game_id':game_id, 'user_id':obj.user_id})
+            if playerStatusId:
+                playerStatus = self.playerstatus_db.get(playerStatusId)
+                playerStatus.start_data = obj.data
+                self.playerstatus_db.update(playerStatusId, playerStatus)
+
+        elif eventType is EndEvent:
+            playerStatusId = self.playerstatus_db.find_one({'game_id':game_id, 'user_id':obj.user_id})
+            if playerStatusId:
+                playerStatus = self.playerstatus_db.get(playerStatusId)
+                playerStatus.end_data = obj.data
+
+                if playerStatus.start_data and playerStatus.end_data:
+                    totalRaceTime:timedelta = playerStatus.end_data.finished_time.astimezone(timezone.utc) - playerStatus.start_data.signal_time.astimezone(timezone.utc)
+                    playerStatus.total_time = str(totalRaceTime.total_seconds())
+                playerStatus.total_score = playerStatus.end_data.total_score
+                self.playerstatus_db.update(playerStatusId, playerStatus)
+
 
         return self.raceevent_db.insert(values)
 
@@ -89,21 +111,29 @@ class DbClient:
         return self.playerstatus_db.find_and_get(query)
 
     def insert_or_update_playerstatus(self, game_id:str, obj: EnterEvent) -> bool:
+        targetCounter = {}
+        for e in target_code:
+            targetCounter[str(e.value)]=0
+
         playerStatus = PlayerStatus(
             game_id = obj.game_id,
             user_id = obj.user_id,
             user_name = obj.user_name,
             laps_completed = 0,
             total_points = 0,
+            total_time = "",
             last_lap = None,
-            best_lap = None
+            best_lap = None,
+            target_code_counter=targetCounter,
+            enter_data = obj.data,
+            end_data = None
         )
 
         oldPlayerId = self.playerstatus_db.find_one(query={"game_id":game_id, "user_id":obj.user_id})
         if oldPlayerId:
             #if the player already existed, use the new, reset data but keep the best lap.
             oldPlayer = self.playerstatus_db.find_one_and_get(query={"game_id":game_id, "user_id":obj.user_id})
-            playerStatus.best_lap = oldPlayer.best_lap
+            #playerStatus.best_lap = oldPlayer.best_lap
 
             self.playerstatus_db.update(oldPlayerId, playerStatus)
         else:
