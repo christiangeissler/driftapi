@@ -42,21 +42,6 @@ def app():
 
     game_id = st.session_state.game_id
 
-    st.markdown(
-        f"""
-<style>
-    .reportview-container .main .block-container{{
-        max-width: {95}%;
-        padding-top: {1}rem;
-        padding-right: {1}rem;
-        padding-left: {1}rem;
-        padding-bottom: {1}rem;
-    }}
-</style>
-""",
-        unsafe_allow_html=True,
-    )
-
     if st.button("Back to Main Menue"):
         st.session_state.nextpage = "main_page"
         st.experimental_rerun()
@@ -74,46 +59,7 @@ def app():
         if "joker_lap_code" in game:
             joker_lap_code = game["joker_lap_code"]
 
-    scoreboard = getScoreBoard(game_id)
-
-    if scoreboard:
-        # CSS to inject contained in a string
-        hide_dataframe_row_index = """
-                    <style>
-                    .row_heading.level0 {display:none}
-                    .blank {display:none}
-                    </style>
-        """
-        # Inject CSS with Markdown
-        st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
-
-        def constructEntry(r:dict):
-            d = {
-                "Spieler":r["user_name"] if "user_name" in r else "",
-                "Beste Runde[s]":r["best_lap"] if "best_lap" in r else None,
-                "Letzte Runde[s]":r["last_lap"] if "last_lap" in r else None,
-                "Runden":r["laps_completed"] if "laps_completed" in r else 0,
-                "Punkte":r["total_score"] if "total_score" in r else 0,
-                "Gesamtzeit":r["total_time"] if "total_time" in r else "",
-            }
-
-            if joker_lap_code:
-                d["Joker Laps"] = str(r["target_code_counter"][str(joker_lap_code)]) if "target_code_counter" in r else "0"
-
-            return d
-
-        scoreboard = [constructEntry(r) for r in scoreboard if (type(r) is dict)]
-        #if there is no entry, just add an empty one by calling the construct Entry with an empty dict
-        while len(scoreboard)<20:
-            scoreboard.append(constructEntry({}))
-        df = pd.DataFrame( scoreboard )
-        st.dataframe(df)
-        #st.dataframe(df, width=1600, height = 20*len(scoreboard))
-        #AgGrid(df)
-    else:
-        st.write("uuups... unexpected result from server")
-        #st.error("Error")
-
+    scoreboard = st.empty()
 
     with st.expander("Game Settings", expanded = False):
         st.write(game)
@@ -124,5 +70,49 @@ def app():
         st.write("URL: "+submitUri)
         st.write("GAME ID: "+game_id)
 
-    time.sleep(2)
-    st.experimental_rerun()
+    while True:
+        with scoreboard.container():
+            scoreboard_data = getScoreBoard(game_id)
+            # CSS to inject contained in a string
+            hide_dataframe_row_index = """
+                        <style>
+                        .row_heading.level0 {display:none}
+                        .blank {display:none}
+                        </style>
+            """
+            # Inject CSS with Markdown
+            st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
+
+            def showTime(s):
+                return round(float(s),2) if not((s is None) or s== '') else 0.0
+
+            def constructEntry(r:dict):
+                d = {
+                    "Spieler":r["user_name"] if "user_name" in r else "",
+                    "Beste Runde[s]":showTime(r["best_lap"]) if "best_lap" in r else None,
+                    "Letzte Runde[s]":showTime(r["last_lap"]) if "last_lap" in r else None,
+                    "Runden":r["laps_completed"] if "laps_completed" in r else 0,
+                    "Punkte":r["total_score"] if "total_score" in r else 0,
+                    "Gesamtzeit":showTime(r["total_time"]) if "total_time" in r else None,
+                }
+
+                if joker_lap_code:
+                    d["Joker Laps"] = str(r["target_code_counter"][str(joker_lap_code)]) if "target_code_counter" in r else "0"
+
+                return d
+
+            scoreboard_data = [constructEntry(r) for r in scoreboard_data if (type(r) is dict)]
+            #if there is no entry, just add an empty one by calling the construct Entry with an empty dict
+            while len(scoreboard_data)<3:
+                scoreboard_data.append(constructEntry({}))
+            df = pd.DataFrame( scoreboard_data )
+            st.dataframe(df)
+            #st.dataframe(df, width=1600, height = 20*len(scoreboard_data))
+            #AgGrid(df)
+
+            time.sleep(3)
+
+
+
+
+
