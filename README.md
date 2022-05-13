@@ -5,6 +5,8 @@ visit localhost:8080 in your browser and create a game.
 Open Drift-App, in the race setup menue enter the local ip-adress of the server (on windows: open cmd, type "ipconfig" to see the ip adresses) with a /game at the end (example: 192.188.22.54/game) as the server uri and choose the same game_id as when you created the game.
 Start the game and drive. You should see the round times appearing on the score board.
 
+
+
 # driftapi
 An openapi proposal and reference server implementation for submitting sturmkind app's racing information
 
