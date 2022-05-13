@@ -82,11 +82,15 @@ if settings.enable_racedisplay:
             raise HTTPException(status_code=409, detail="A game with that id already exists. Delete the game and then try again.")
         return db_client.game_db.insert(game)
 
-    @app.post("/manage_game/delete/{game_id}")
-    async def delete_game():
+    @app.get("/manage_game/delete/{game_id}")
+    async def delete_game(game_id:str):
         query = {"game_id":game_id}
         id = db_client.game_db.find_one(query)
         if id:
+            query = {"game_id":game_id}#need a new dict
+            idsOfPlayerstatiInGame = db_client.playerstatus_db.find(query)
+            for playerstatus_id in idsOfPlayerstatiInGame:
+                db_client.playerstatus_db.delete(playerstatus_id)
             return db_client.game_db.delete(id)
         raise HTTPException(status_code=404, detail="Item not found")
 

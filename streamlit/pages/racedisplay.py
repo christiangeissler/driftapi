@@ -96,14 +96,16 @@ def app():
                     "Gesamtzeit":showTime(r["total_time"]) if "total_time" in r else None,
                 }
 
-                if joker_lap_code:
-                    d["Joker Laps"] = str(r["target_code_counter"][str(joker_lap_code)]) if "target_code_counter" in r else "0"
+                if joker_lap_code != None:
+                    #d["Joker Laps"] = str(r["target_code_counter"][str(joker_lap_code)]) if "target_code_counter" in r else "0"
+                    d["Joker Laps"] = int(r["joker_laps_counter"]) if "joker_laps_counter" in r else 0
+                    
 
                 return d
 
             scoreboard_data = [constructEntry(r) for r in scoreboard_data if (type(r) is dict)]
             #if there is no entry, just add an empty one by calling the construct Entry with an empty dict
-            while len(scoreboard_data)<3:
+            while len(scoreboard_data)<4:
                 scoreboard_data.append(constructEntry({}))
             df = pd.DataFrame( scoreboard_data )
             st.dataframe(df)

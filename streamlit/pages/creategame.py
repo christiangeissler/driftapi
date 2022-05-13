@@ -90,10 +90,11 @@ def app():
                 columnLeft, columnRight = st.columns(2)
                 with columnLeft:
                     joker_lap_enabled = st.checkbox("Enable Joker Lap Counter", value=False, key=None, help=None, on_change=None)
+                    joker_lap_precondition_enabled = st.checkbox("Enable precondition", value=False, key=None, help="when a precondition code is set, the actual joker lap code is only counted when the racer deceted the precondition code right before the joker lap code.", on_change=None)
                 with columnRight:
-                    options = {"angle drift":target_code.angle_drift, "360":target_code.threesixty, "180 speed":target_code.oneeighty, "speed drift":target_code.speed_drift}
+                    options = {"start/finish":target_code.start_finish, "angle drift":target_code.angle_drift, "360":target_code.threesixty, "180 speed":target_code.oneeighty, "speed drift":target_code.speed_drift}
                     joker_lap_code = str(options[st.selectbox(label="Code to be used for joker lap", options=[*options])].value)
-
+                    joker_lap_precondition_code = str(options[st.selectbox(label="Additional code that need to be detected before the actual joker lap code", options=[*options], index=1)].value)
 
 
         submitted = st.form_submit_button("Create")
@@ -128,6 +129,9 @@ def app():
 
                 if joker_lap_enabled:
                     body['joker_lap_code'] = str(joker_lap_code)
+
+                    if joker_lap_precondition_enabled:
+                        body['joker_lap_precondition_code'] = str(joker_lap_precondition_code)
 
                 result = fetch_post(f"{settings.driftapi_path}/manage_game/create", body)
 

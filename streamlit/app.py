@@ -2,7 +2,7 @@ import streamlit as st
 
 # Custom imports 
 from multipage import MultiPage
-from pages import mainpage, creategame, select_race, racedisplay # import your pages here
+from pages import mainpage, creategame, select_race, delete_race, racedisplay # import your pages here
 
 def _max_width_(prcnt_width:int = 75):
     max_width_str = f"max-width: {prcnt_width}%;"
@@ -26,6 +26,7 @@ if __name__ == '__main__':
     app.add_page("main_page", mainpage.app)
     app.add_page("create_game", creategame.app)
     app.add_page("select_race", select_race.app)
+    app.add_page("delete_race", delete_race.app)
     app.add_page("racedisplay", racedisplay.app)
 
     print(app.pages)
