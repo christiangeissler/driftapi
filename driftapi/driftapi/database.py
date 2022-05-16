@@ -231,13 +231,13 @@ class GenericDbClient(Generic[T]):
         query['class'] = self.cls.__name__
         res = self.db.find(query)
         if res is not None:
-            return [res['_id'] for x in res]
+            return [r['_id'] for r in res]
 
     def find_and_get(self, query:dict) -> Optional[List[T]]:
         query['class'] = self.cls.__name__
         res = self.db.find(query)
         if res is not None:
-            return [_convert(x, self.cls) for x in res]
+            return [_convert(r, self.cls) for r in res]
 
     def find_one(self, query:dict) -> Optional[str]:
         query['class'] = self.cls.__name__

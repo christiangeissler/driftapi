@@ -1,9 +1,7 @@
 import streamlit as st
-import time
 from zoneinfo import ZoneInfo #to set the timezone to german time
 from enum import Enum
 from datetime import datetime, timezone
-import json
 from  .session import fetch_post, fetch_put
 from .singletons import settings
 from .model import track_condition, track_bundle, wheels, setup_mode, target_code
@@ -24,7 +22,7 @@ def createGameOptionContainer(label:str, options:Enum):
 
 def app():
     
-    with st.form("my_form"):
+    with st.form("my_form", clear_on_submit=True):
         gameOptions = {}
         game_id = st.text_input("Game ID", value="Race1", max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, disabled=False)
 
@@ -135,12 +133,11 @@ def app():
 
                 result = fetch_post(f"{settings.driftapi_path}/manage_game/create", body)
 
-                if result:
-                    st.success("Race has been created")
+                #if result:
+                    #st.success("Race has been created")
                     #st.write(result)
 
 
-                time.sleep(1)
                 st.session_state.nextpage = "racedisplay"
                 st.session_state.game_id = game_id
                 st.experimental_rerun()

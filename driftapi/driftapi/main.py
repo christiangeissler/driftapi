@@ -71,9 +71,8 @@ if settings.enable_racedisplay:
     @app.get("/game/{game_id}/playerstatus", status_code=200)
     async def get_scoreboard(game_id:str):
         result = db_client.playerstatus_db.find_and_get(query={'game_id':game_id})
-        if result:
-            return result
-        raise HTTPException(status_code=404, detail="a game with that id was not found")
+        return result
+        
 
     @app.post("/manage_game/create", status_code=201)
     async def create_game(game:Game):
@@ -82,7 +81,7 @@ if settings.enable_racedisplay:
             raise HTTPException(status_code=409, detail="A game with that id already exists. Delete the game and then try again.")
         return db_client.game_db.insert(game)
 
-    @app.get("/manage_game/delete/{game_id}")
+    @app.get("/manage_game/delete/{game_id}", status_code=200)
     async def delete_game(game_id:str):
         query = {"game_id":game_id}
         id = db_client.game_db.find_one(query)
@@ -93,6 +92,22 @@ if settings.enable_racedisplay:
                 db_client.playerstatus_db.delete(playerstatus_id)
             return db_client.game_db.delete(id)
         raise HTTPException(status_code=404, detail="Item not found")
+
+    @app.get("/manage_game/reset/{game_id}", status_code=200)
+    async def reset_game(game_id:str):
+        query = {"game_id":game_id}
+        idsOfPlayerstatiInGame = db_client.playerstatus_db.find(query)
+        for playerstatus_id in idsOfPlayerstatiInGame:
+            db_client.playerstatus_db.delete(playerstatus_id)
+        return
+
+    @app.get("/manage_game/reset_player/{game_id}/{user_name}", status_code=200)
+    async def reset_player(game_id:str, user_name:str):
+        query = {"game_id":game_id, "user_name":user_name}#need a new dict
+        idsOfPlayerstatiInGame = db_client.playerstatus_db.find(query)
+        for playerstatus_id in idsOfPlayerstatiInGame:
+            db_client.playerstatus_db.delete(playerstatus_id)
+        return
 
     @app.get("/manage_game/get/{game_id}/", status_code=200)
     async def get_game(game_id:str):

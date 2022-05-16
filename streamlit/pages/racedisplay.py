@@ -1,12 +1,10 @@
 import streamlit as st
 import time
-import base64
 from datetime import timedelta
 import pandas as pd 
 import numpy as np
 import qrcode
 from PIL import Image
-from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
 from  .session import fetch_post, fetch_put, fetch_get
 from .singletons import settings, logger
@@ -42,10 +40,6 @@ def app():
 
     game_id = st.session_state.game_id
 
-    if st.button("Back to Main Menue"):
-        st.session_state.nextpage = "main_page"
-        st.experimental_rerun()
-
     game = getGameInfo(game_id)
 
     if not game:
@@ -70,6 +64,35 @@ def app():
         st.write("URL: "+submitUri)
         st.write("GAME ID: "+game_id)
 
+    col1, col2, col3, col4, col5 = st.columns(5)
+
+    with col1:
+        if st.button("Back to Menue"):
+            st.session_state.nextpage = "main_page"
+            st.experimental_rerun()
+
+    with col2:
+        if st.button("Download"):
+            st.session_state.nextpage = "download_race"
+            st.experimental_rerun()
+
+    with col3:
+        if st.button("Remove Player"):
+                st.session_state.nextpage = "remove_player_from_race"
+                st.experimental_rerun()
+
+    with col4:
+        if st.button("Reset Game"):
+            result = fetch_get(f"{settings.driftapi_path}/manage_game/reset/{game_id}")
+            st.experimental_rerun()
+
+    with col5:
+        if st.button("Delete Game"):
+            result = fetch_get(f"{settings.driftapi_path}/manage_game/delete/{game_id}")
+            st.session_state.game_id = None
+            st.session_state.nextpage = "main_page"
+            st.experimental_rerun()
+
     while True:
         with scoreboard.container():
             scoreboard_data = getScoreBoard(game_id)
@@ -89,16 +112,15 @@ def app():
             def constructEntry(r:dict):
                 d = {
                     "Spieler":r["user_name"] if "user_name" in r else "",
-                    "Beste Runde[s]":showTime(r["best_lap"]) if "best_lap" in r else None,
-                    "Letzte Runde[s]":showTime(r["last_lap"]) if "last_lap" in r else None,
+                    "Beste[s]":showTime(r["best_lap"]) if "best_lap" in r else None,
+                    "Letzte[s]":showTime(r["last_lap"]) if "last_lap" in r else None,
                     "Runden":r["laps_completed"] if "laps_completed" in r else 0,
                     "Punkte":r["total_score"] if "total_score" in r else 0,
-                    "Gesamtzeit":showTime(r["total_time"]) if "total_time" in r else None,
+                    "Zeit[s]":showTime(r["total_time"]) if "total_time" in r else None,
                 }
 
                 if joker_lap_code != None:
-                    #d["Joker Laps"] = str(r["target_code_counter"][str(joker_lap_code)]) if "target_code_counter" in r else "0"
-                    d["Joker Laps"] = int(r["joker_laps_counter"]) if "joker_laps_counter" in r else 0
+                    d["Joker"] = int(r["joker_laps_counter"]) if "joker_laps_counter" in r else 0
                     
 
                 return d
@@ -110,7 +132,6 @@ def app():
             df = pd.DataFrame( scoreboard_data )
             st.dataframe(df)
             #st.dataframe(df, width=1600, height = 20*len(scoreboard_data))
-            #AgGrid(df)
 
             time.sleep(3)
 
