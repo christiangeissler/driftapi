@@ -1,5 +1,4 @@
 import requests
-import json
 from .singletons import logger
 
 session = requests.Session()

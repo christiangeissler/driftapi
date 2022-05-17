@@ -15,8 +15,13 @@ def app():
         st.experimental_rerun()
 
     if st.button("Show Game"):
-        st.session_state.nextpage = "racedisplay"
+        st.session_state.nextpage = "select_race"
         st.experimental_rerun()
+    '''
+    if st.button("Delete Game"):
+        st.session_state.nextpage = "delete_race"
+        st.experimental_rerun()
+    '''
 
     st.write("Available games:")
     result = fetch_post(f"{settings.driftapi_path}/manage_game/find/", {})

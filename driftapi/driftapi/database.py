@@ -47,9 +47,22 @@ class DbClient:
         elif eventType is TargetEvent:
             playerStatusId = self.playerstatus_db.find_one({'game_id':game_id, 'user_id':obj.user_id})
             playerStatus = self.playerstatus_db.get(playerStatusId)
+            game = self.game_db.find_one_and_get({'game_id':game_id})
 
             #increase the target code counter by one (for tracking the number of targets that had been passed)
             playerStatus.target_code_counter[str(obj.data.target_code.value)]+=1
+
+            #check if joker lap should be increased:
+            logger.info(game.joker_lap_code)
+            logger.info(obj.data.target_code)
+            if game.joker_lap_code == obj.data.target_code:
+                logger.info("JOKER LAP CALCULATION")
+                logger.info(game.joker_lap_precondition_code)
+                logger.info(playerStatus.last_recognized_target)
+                if not game.joker_lap_precondition_code:
+                    playerStatus.joker_laps_counter += 1
+                elif game.joker_lap_precondition_code == playerStatus.last_recognized_target:
+                    playerStatus.joker_laps_counter += 1
 
             if obj.data.target_code == target_code.start_finish:
                 if playerStatus.last_lap_timestamp:
@@ -64,6 +77,7 @@ class DbClient:
                     else:
                         playerStatus.best_lap = str(new_lap_time.total_seconds())
                 playerStatus.last_lap_timestamp = obj.data.crossing_time
+                playerStatus.last_recognized_target = obj.data.target_code
             if obj.data.score>0:
                 playerStatus.total_score += obj.data.score
         
@@ -125,6 +139,8 @@ class DbClient:
             last_lap = None,
             best_lap = None,
             target_code_counter=targetCounter,
+            last_recognized_target = None,
+            joker_laps_counter = 0,
             enter_data = obj.data,
             end_data = None
         )
@@ -215,13 +231,13 @@ class GenericDbClient(Generic[T]):
         query['class'] = self.cls.__name__
         res = self.db.find(query)
         if res is not None:
-            return [res['_id'] for x in res]
+            return [r['_id'] for r in res]
 
     def find_and_get(self, query:dict) -> Optional[List[T]]:
         query['class'] = self.cls.__name__
         res = self.db.find(query)
         if res is not None:
-            return [_convert(x, self.cls) for x in res]
+            return [_convert(r, self.cls) for r in res]
 
     def find_one(self, query:dict) -> Optional[str]:
         query['class'] = self.cls.__name__

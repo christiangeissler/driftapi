@@ -1,12 +1,10 @@
 import streamlit as st
 import time
-import base64
 from datetime import timedelta
 import pandas as pd 
 import numpy as np
 import qrcode
 from PIL import Image
-from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 
 from  .session import fetch_post, fetch_put, fetch_get
 from .singletons import settings, logger
@@ -32,60 +30,112 @@ def getqrcode(content):
     return Image.open('./qrcode_test.png')
 
 
+def getGameInfo(game_id):
+    return fetch_get(f"{settings.driftapi_path}/manage_game/get/{game_id}/")
+
+def getScoreBoard(game_id):
+    return fetch_get(f"{settings.driftapi_path}/game/{game_id}/playerstatus")
+
 def app():
 
-    if st.button("Back to Main Menue"):
+    game_id = st.session_state.game_id
+
+    game = getGameInfo(game_id)
+
+    if not game:
+        st.error("No Game with that id exists, going back to main menue...")
+        time.sleep(1)
         st.session_state.nextpage = "main_page"
         st.experimental_rerun()
 
-    game_id = ""
+    joker_lap_code = None
+    if game:
+        if "joker_lap_code" in game:
+            joker_lap_code = game["joker_lap_code"]
 
+    scoreboard = st.empty()
 
-    if 'game_id' not in st.session_state:
-        with st.form("my_form"):
-            result = fetch_post(f"{settings.driftapi_path}/manage_game/find/", {})
-            if result:
-                result = [r["game_id"] for r in result if ("game_id" in r.keys())]
-                game_id = st.selectbox(label="Choose Game", options=result)
-                if st.form_submit_button("Show"):
-                    st.session_state.game_id = game_id
-                    st.experimental_rerun()
-    else:
-        game_id = st.session_state.game_id
-        future = st.empty()
+    with st.expander("Game Settings", expanded = False):
+        st.write(game)
 
-        with st.expander("Game Settings", expanded = False):
-            result = fetch_get(f"{settings.driftapi_path}/manage_game/get/{game_id}/")
-            st.write(result)
-        
-        with st.expander("Connection info", expanded=False):
-            submitUri:str = settings.hostname+":8001/game"
-            st.image(getqrcode(submitUri), clamp=True)
-            st.write("URL: "+submitUri)
-            st.write("GAME ID: "+game_id)
+    with st.expander("Connection info", expanded=False):
+        submitUri:str = "http://"+settings.hostname+":8001/game"
+        st.image(getqrcode(submitUri), clamp=True)
+        st.write("URL: "+submitUri)
+        st.write("GAME ID: "+game_id)
 
-        result = fetch_get(f"{settings.driftapi_path}/game/{game_id}/ping")
-        
-        if result:
-            while True:
-                result = fetch_get(f"{settings.driftapi_path}/game/{game_id}/playerstatus")
-                if result:
-                    with future.container():
-                        #"Targets":str(r["target_code_counter"])
-                        toBeDisplayedData = pd.DataFrame( [{"Spieler":r["user_name"], "Beste Runde[s]":r["best_lap"], "Letzte Runde[s]":r["last_lap"], "Runden":r["laps_completed"], "Punkte":r["total_score"], "Gesamtzeit":r["total_time"]} for r in result if (type(r) is dict) and ("user_name" in r.keys())] )
-                        st.dataframe(toBeDisplayedData)
-                        #AgGrid(toBeDisplayedData)
-                else:
-                    with future.container():
-                        st.write("Waiting for players to join...")
-                        #st.error("Error")
+    col1, col2, col3, col4, col5 = st.columns(5)
 
-                time.sleep(2)
-        else:
-            with future.container():
-                st.error("No Game with that id exists, going back to main menue...")
-                time.sleep(1)
-                st.session_state.nextpage = "main_page"
+    with col1:
+        if st.button("Back to Menue"):
+            st.session_state.nextpage = "main_page"
+            st.experimental_rerun()
+
+    with col2:
+        if st.button("Download"):
+            st.session_state.nextpage = "download_race"
+            st.experimental_rerun()
+
+    with col3:
+        if st.button("Remove Player"):
+                st.session_state.nextpage = "remove_player_from_race"
                 st.experimental_rerun()
+
+    with col4:
+        if st.button("Reset Game"):
+            result = fetch_get(f"{settings.driftapi_path}/manage_game/reset/{game_id}")
+            st.experimental_rerun()
+
+    with col5:
+        if st.button("Delete Game"):
+            result = fetch_get(f"{settings.driftapi_path}/manage_game/delete/{game_id}")
+            st.session_state.game_id = None
+            st.session_state.nextpage = "main_page"
+            st.experimental_rerun()
+
+    while True:
+        with scoreboard.container():
+            scoreboard_data = getScoreBoard(game_id)
+            # CSS to inject contained in a string
+            hide_dataframe_row_index = """
+                        <style>
+                        .row_heading.level0 {display:none}
+                        .blank {display:none}
+                        </style>
+            """
+            # Inject CSS with Markdown
+            st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
+
+            def showTime(s):
+                return round(float(s),2) if not((s is None) or s== '') else 0.0
+
+            def constructEntry(r:dict):
+                d = {
+                    "Spieler":r["user_name"] if "user_name" in r else "",
+                    "Beste[s]":showTime(r["best_lap"]) if "best_lap" in r else None,
+                    "Letzte[s]":showTime(r["last_lap"]) if "last_lap" in r else None,
+                    "Runden":r["laps_completed"] if "laps_completed" in r else 0,
+                    "Punkte":r["total_score"] if "total_score" in r else 0,
+                    "Zeit[s]":showTime(r["total_time"]) if "total_time" in r else None,
+                }
+
+                if joker_lap_code != None:
+                    d["Joker"] = int(r["joker_laps_counter"]) if "joker_laps_counter" in r else 0
+                    
+
+                return d
+
+            scoreboard_data = [constructEntry(r) for r in scoreboard_data if (type(r) is dict)]
+            #if there is no entry, just add an empty one by calling the construct Entry with an empty dict
+            while len(scoreboard_data)<4:
+                scoreboard_data.append(constructEntry({}))
+            df = pd.DataFrame( scoreboard_data )
+            st.dataframe(df)
+            #st.dataframe(df, width=1600, height = 20*len(scoreboard_data))
+
+            time.sleep(3)
+
+
+
 
 

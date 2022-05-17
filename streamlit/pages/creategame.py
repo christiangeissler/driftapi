@@ -1,8 +1,7 @@
 import streamlit as st
-import time
+from zoneinfo import ZoneInfo #to set the timezone to german time
 from enum import Enum
 from datetime import datetime, timezone
-import json
 from  .session import fetch_post, fetch_put
 from .singletons import settings
 from .model import track_condition, track_bundle, wheels, setup_mode, target_code
@@ -23,7 +22,7 @@ def createGameOptionContainer(label:str, options:Enum):
 
 def app():
     
-    with st.form("my_form"):
+    with st.form("my_form", clear_on_submit=True):
         gameOptions = {}
         game_id = st.text_input("Game ID", value="Race1", max_chars=None, key=None, type="default", help=None, autocomplete=None, on_change=None, disabled=False)
 
@@ -37,7 +36,7 @@ def app():
                 with columnLeft:
                     start_time_enabled = st.checkbox("Enable start time", value=False, key=None, help=None, on_change=None)
                 with columnRight:
-                    start_time = st.time_input('Start time (Local)', value=datetime.now(), key=None, help=None, on_change=None, disabled = False)
+                    start_time = st.time_input('Start time (Local)', value=datetime.now(tz=ZoneInfo("Europe/Berlin")), key=None, help=None, on_change=None, disabled = False)
                     start_time = datetime.combine(datetime.today(), start_time)
                     start_time = start_time.astimezone(timezone.utc)
 
@@ -84,15 +83,16 @@ def app():
                     setup_mode_enabled = st.checkbox("Enable setup mode", value=False, key=None, help=None, on_change=None)
                 with columnRight:
                     setup_mode_selected = st.selectbox(label="setup mode", options=[e.value for e in setup_mode])
-            '''
+
             with st.container():
                 columnLeft, columnRight = st.columns(2)
                 with columnLeft:
                     joker_lap_enabled = st.checkbox("Enable Joker Lap Counter", value=False, key=None, help=None, on_change=None)
+                    joker_lap_precondition_enabled = st.checkbox("Enable precondition", value=False, key=None, help="when a precondition code is set, the actual joker lap code is only counted when the racer deceted the precondition code right before the joker lap code.", on_change=None)
                 with columnRight:
-                    options = {"angle drift":target_code.angle_drift, "360":target_code.threesixty, "180 speed":target_code.oneeighty, "speed drift":target_code.speed_drift}
-                    joker_lap_code = str(options[st.selectbox(label="Code to be used for joker lap", options=[*options])])
-            ''' 
+                    options = {"start/finish":target_code.start_finish, "angle drift":target_code.angle_drift, "360":target_code.threesixty, "180 speed":target_code.oneeighty, "speed drift":target_code.speed_drift}
+                    joker_lap_code = str(options[st.selectbox(label="Code to be used for joker lap", options=[*options])].value)
+                    joker_lap_precondition_code = str(options[st.selectbox(label="Additional code that need to be detected before the actual joker lap code", options=[*options], index=1)].value)
 
 
         submitted = st.form_submit_button("Create")
@@ -124,20 +124,20 @@ def app():
                 if setup_mode_enabled:
                     body['setup_mode'] = str(setup_mode_selected)
 
-                '''
-                if joker_lap_enabled:
-                    body['joker_lap_code'] = joker_lap_code
-                '''
-                #body = {}
-                result = fetch_post(f"{settings.driftapi_path}/manage_game/create", body)
-                
 
-                if result:
-                    st.success("Race has been created")
+                if joker_lap_enabled:
+                    body['joker_lap_code'] = str(joker_lap_code)
+
+                    if joker_lap_precondition_enabled:
+                        body['joker_lap_precondition_code'] = str(joker_lap_precondition_code)
+
+                result = fetch_post(f"{settings.driftapi_path}/manage_game/create", body)
+
+                #if result:
+                    #st.success("Race has been created")
                     #st.write(result)
 
 
-                time.sleep(1)
                 st.session_state.nextpage = "racedisplay"
                 st.session_state.game_id = game_id
                 st.experimental_rerun()
