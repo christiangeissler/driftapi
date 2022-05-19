@@ -53,16 +53,24 @@ class DbClient:
             playerStatus.target_code_counter[str(obj.data.target_code.value)]+=1
 
             #check if joker lap should be increased:
-            logger.info(game.joker_lap_code)
-            logger.info(obj.data.target_code)
+
             if game.joker_lap_code == obj.data.target_code:
                 logger.info("JOKER LAP CALCULATION")
+                logger.info("Conditions:")
+                logger.info(game.joker_lap_code)
                 logger.info(game.joker_lap_precondition_code)
+                logger.info("Status:")
+                logger.info(obj.data.target_code)
                 logger.info(playerStatus.last_recognized_target)
                 if not game.joker_lap_precondition_code:
                     playerStatus.joker_laps_counter += 1
+                    logger.info("Joker lap without precondition triggered")
                 elif game.joker_lap_precondition_code == playerStatus.last_recognized_target:
                     playerStatus.joker_laps_counter += 1
+                    logger.info("Joker lap with precondition triggered")
+                else:
+                    logger.info("no joker lap triggered because condition is not fullfilled (condition->status)")
+
 
             if obj.data.target_code == target_code.start_finish:
                 if playerStatus.last_lap_timestamp:
@@ -77,10 +85,10 @@ class DbClient:
                     else:
                         playerStatus.best_lap = str(new_lap_time.total_seconds())
                 playerStatus.last_lap_timestamp = obj.data.crossing_time
-                playerStatus.last_recognized_target = obj.data.target_code
             if obj.data.score>0:
                 playerStatus.total_score += obj.data.score
-        
+                
+            playerStatus.last_recognized_target = obj.data.target_code
             self.playerstatus_db.update(playerStatusId, playerStatus)
         elif eventType is StartEvent:
             playerStatusId = self.playerstatus_db.find_one({'game_id':game_id, 'user_id':obj.user_id})
@@ -102,8 +110,8 @@ class DbClient:
                 self.playerstatus_db.update(playerStatusId, playerStatus)
 
 
-        return self.raceevent_db.insert(values)
-
+        return "OK"#self.raceevent_db.insert(values)
+    '''
     def update_raceevent(self, id_: str, raceevent: RaceEvent) -> bool:
         values = {**raceevent.dict(), "updated_at": get_time()}
         return self.raceevent_db.update(id_, values)
@@ -115,10 +123,11 @@ class DbClient:
         res = self.raceevent_db.get(id_)
         cls = globals()[res["class"]]
         return res and _convert(res, cls)
-
+    
     def find_raceevent(self, query:dict) -> List[RaceEvent]:
         res = self.raceevent_db.find(query)
         return res and [_convert(x, globals()[x["class"]]) for x in res]
+    '''
 
     def get_scoreboard(self, game_id:str) -> List[PlayerStatus]:
         query = {"game_id":game_id}
