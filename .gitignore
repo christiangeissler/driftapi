@@ -130,6 +130,7 @@ dmypy.json
 
 # Visual Studio Code
 .vscode/
+.vs
 
 # Application Specific
 qrcode_test.png
