@@ -47,5 +47,30 @@ Das bedeutet, dass alles geklappt hat und der Racingserver sogar schon im Hinter
 # Bedienung
 
 # Fehler und Lösungen
+## docker compose funktioniert nicht ##
+
+### Grund 1: Docker läuft nicht im Hintergrund ###
+Der häufigste Grund ist der, dass der docker service nicht im Hintergrund läuft. Stell sicher, dass docker läuft. Standardmässig wird docker bei der Installation fragen, ob es automatisch bei systemstart gestartet werden soll. Wenn du dem nicht zugestimmt hast, dann starte docker selbst bevor du docker compose ausführst.
+
+### Grund 2: Nicht genug Speicherplatz ###
+Der zweite häufige Grund ist mangelnder Speicherplatz. Stell sicher, dass auf deiner Systemfestplatte genug Platz frei ist (etwa 5GB). Wenn du den Server häufig benutzt, macht es ab und zu sinn, ältere docker dateien zu löschen. Wenn du Docker Desktop installiert hast, dann kannst du das recht einfach über die GUI erledigen. Siehe dazu [Lösung: Reset](#lösung:-reset).
+
+### Grund 3: Irgendwas ist beim erstellen der Dienste schief gegangen ###
+Kann selten mal passieren, folge einfach den Anweisungen in  [Lösung: Reset](#lösung:-reset).
+
+### Lösung: Reset ###
+Stell sicher, dass keine Container laufen. In der Docker Desktop GUI, klick auf den oberen Button in der linken Seitenleiste ("Containers/Apps"). Beende alle Container die dort zu sehen sind und lösche diese. Danach klick auf "Images" in der linken Seitenleiste. Lösche auch hier alle. Danach dasselbe mit den "Volumes" darunter. Dann folge den Anweisungen im Kapitel [Installation](#installation) direkt nachdem Docker installiert wurde.
+
+## Die angegebene IP unter "Connection Info" stimmt nicht ##
+Das Problem ist bekannt und steht auf der "Todo" Liste. Ermittel die IP des Laptops auf dem der Server läuft manuell, z.B. über den Konsolenbefehl "ipconfig" unter windows oder "ifconfig" unter linux/ios.
+
+## Die Drift-App findet den Server/Race nicht ##
+Schau ob du die richtige IP-Adresse verwendest (notfalls manuell ermitteln, siehe obiger Punkte). Wenn die Adresse korrekt ist, aber kein Rennen mit diesem Namen existiert, dann erscheint in der App ein rotes Kreuz. In dem Fall, einfach auf dem Server ein entsprechend benanntes Rennen erstellen.
+
+## Die Zeiten im Racingserver stimmen nicht exakt mit denen in der App überein ##
+Es kann vorkommen, dass die Zeiten um wenige Millisekunden unterschiedlich sind, bisher sind mir Unterschiede um die +- 0.004 Sekunden aufgefallen. Dieser Fehler ist bekannt und steht schon auf der "Todo" Liste.
+
+## Ein Spieler steht doppelt in der Liste ##
+Das kann vorkommen, wenn zwei Spieler den gleichen Namen gewählt haben oder die App zwischendurch mal vollständig aus gewesen ist, oder man auf ein anderes Smartphone gewechselt ist. Da die API aus rechtlichen Gründen nicht automatisch eure echten Sturmkind-Account namen rausgeben darf, verwenden wir für die Zuordnung ein ab und zu wechselndes Merkmal. Ich empfehle, pro Rennen das ihr fahrt entweder immer auch ein neues Rennen im Server anzulegen, oder aber zwischendurch den Reset-Knopf zu drücken. Ihr könnte aber unter der Liste auch gezielt nur bestimmte Spielernamen aus der Liste löschen.
 
 # Drift Community API
