@@ -1,8 +1,13 @@
-[Was ist das hier?](#einleitung) 
+[Was ist das hier?](#einleitung)
+
 [Wie installier ich das?](#installation)
+
 [Wie starte und beende ich das?](#start)
+
 [Wie bediene ich das?](#bedienung)
+
 [Typische Fehler und wie man sie hoffentlich behebt](#fehler-und-lösungen)
+
 [Dr!ft Community API](#drift-community-api)
 
 
