@@ -1,14 +1,11 @@
-[Was ist das hier?](#einleitung)
-
-[Wie installier ich das?](#installation)
-
-[Wie starte und beende ich das?](#start)
-
-[Wie bediene ich das?](#bedienung)
-
-[Typische Fehler und wie man sie hoffentlich behebt](#fehler-und-lösungen)
-
-[Dr!ft Community API](#drift-community-api)
+# Dr!ft Community API Racing Server #
+ 
+* [Was ist das hier?](#einleitung)
+* [Wie installier ich das?](#installation)
+* [Wie starte und beende ich das?](#start)
+* [Wie bediene ich das?](#bedienung)
+* [Typische Fehler und wie man sie hoffentlich behebt](#fehler-und-lösungen)
+* [Dr!ft Community API](#drift-community-api)
 
 
 # Einleitung
@@ -43,11 +40,25 @@ Das kann jetzt eine Weile dauern, weil Docker eine ganze Menge zu tun hat. Das S
 Das bedeutet, dass alles geklappt hat und der Racingserver sogar schon im Hintergrund läuft. Beenden könnt ihr den Server indem ihr in der Konsole "Str+C" drückt.
 
 # Start
+Wechsle in den Ordner des Servers (in dem auch diese Anleitung steht), öffne eine Konsole und schreibe:
+
+>docker compose --profile racedisplay up
+
+Danach kannst du den Server über die Webseite "localhost:8080" erreichen, einfach in die Browser-Adresszeile schreiben.
 
 # Bedienung
 
 # Fehler und Lösungen
-## docker compose funktioniert nicht ##
+
+* [Docker compose funktioniert nicht](#docker-compose-funktioniert-nicht)
+* [Die IP unter Connection Info stimmt nicht](#die-ip-unter-connection-info-stimmt-nicht)
+* [Die Drift-App findet den Server nicht](#die-drift-app-findet-den-server-nicht)
+* [Die Zeiten im Racingserver stimmen nicht exakt mit denen in der App überein](#die-zeiten-im-racingserver-stimmen-nicht-exakt-mit-denen-in-der-app-überein)
+* [Ein Spieler steht doppelt in der Liste](#ein-spieler-steht-doppelt-in-der-liste)
+
+
+## Docker compose funktioniert nicht ##
+Das kann mehrere Gründe haben, die häufigsten sind hier aufgeführt:
 
 ### Grund 1: Docker läuft nicht im Hintergrund ###
 Der häufigste Grund ist der, dass der docker service nicht im Hintergrund läuft. Stell sicher, dass docker läuft. Standardmässig wird docker bei der Installation fragen, ob es automatisch bei systemstart gestartet werden soll. Wenn du dem nicht zugestimmt hast, dann starte docker selbst bevor du docker compose ausführst.
@@ -61,10 +72,10 @@ Kann selten mal passieren, folge einfach den Anweisungen in  [Lösung: Reset](#l
 ### Lösung: Reset ###
 Stell sicher, dass keine Container laufen. In der Docker Desktop GUI, klick auf den oberen Button in der linken Seitenleiste ("Containers/Apps"). Beende alle Container die dort zu sehen sind und lösche diese. Danach klick auf "Images" in der linken Seitenleiste. Lösche auch hier alle. Danach dasselbe mit den "Volumes" darunter. Dann folge den Anweisungen im Kapitel [Installation](#installation) direkt nachdem Docker installiert wurde.
 
-## Die angegebene IP unter "Connection Info" stimmt nicht ##
+## Die IP unter Connection Info stimmt nicht ##
 Das Problem ist bekannt und steht auf der "Todo" Liste. Ermittel die IP des Laptops auf dem der Server läuft manuell, z.B. über den Konsolenbefehl "ipconfig" unter windows oder "ifconfig" unter linux/ios.
 
-## Die Drift-App findet den Server/Race nicht ##
+## Die Drift-App findet den Server nicht ##
 Schau ob du die richtige IP-Adresse verwendest (notfalls manuell ermitteln, siehe obiger Punkte). Wenn die Adresse korrekt ist, aber kein Rennen mit diesem Namen existiert, dann erscheint in der App ein rotes Kreuz. In dem Fall, einfach auf dem Server ein entsprechend benanntes Rennen erstellen.
 
 ## Die Zeiten im Racingserver stimmen nicht exakt mit denen in der App überein ##
