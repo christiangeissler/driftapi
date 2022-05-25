@@ -11,12 +11,12 @@
 [Dr!ft Community API](#drift-community-api)
 
 
-#Einleitung
+# Einleitung
 Dieser Dr!ft Racingserver verfolgt zwei Ziele: Zum einen als Prototyp um die Dr!ft Community API zu entwickeln und zu testen, zum anderen um euch einen Ausblick darauf zu geben, was damit alles möglich ist. Der Dr!ft Racingserver kann lokal auf einem Laptop aufgesetzt werden und stellt euch dort dann eine Webseite bereit, auf der ihr Rennen anlegen, den Rennfortschritt der Teilnehmer anschauen und die Ergebnisse im Anschluss als .csv Datei für den Import in Excel & co herunter laden könnt.
 
 Achtung: Dieser Server ist nicht dazu geeignet, ihn offen ins Internet zu stellen. Die generierte Webseite hat z.B. keinerlei Sicherheitsmaßnahmen wie eine Benutzerverwaltung oder Passwortschutz, d.h. jeder der die Adresse der Webseite kennt kann dort Rennen anlegen, löschen etc.. Benutzt ihn also besser nur lokal und mit Leuten, die da keinen Mist mit machen. Wir werden in Zukunft sicherlich noch bessere Racingserver sehen, die dann im Internet laufen und auf denen jeder ohne Installation bequem selbst seine Rennen auf machen kann, aber das wird noch eine Weile dauern. Dieser Racingserver dient erst mal der schnellen Entwicklung einer soliden Basis. Wenn du mehr zur Entwicklung etc. wissen willst, schau mal ins Kapitel  [Dr!ft Community API](#drift-community-api)
 
-#Installation
+# Installation
 Zunächst musst du auf deinem PC die Software "Docker" installieren. Diese gibt es für Windows, iOS und Linux und eine bequeme Desktop-Version bekommst du hier:
 
 https://www.docker.com/products/docker-desktop
@@ -42,10 +42,10 @@ Das kann jetzt eine Weile dauern, weil Docker eine ganze Menge zu tun hat. Das S
 
 Das bedeutet, dass alles geklappt hat und der Racingserver sogar schon im Hintergrund läuft. Beenden könnt ihr den Server indem ihr in der Konsole "Str+C" drückt.
 
-#Start
+# Start
 
-#Bedienung
+# Bedienung
 
-#Fehler und Lösungen
+# Fehler und Lösungen
 
-#Drift Community API
+# Drift Community API
