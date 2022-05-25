@@ -1,12 +1,12 @@
 # Quickstart:
 * Have docker 
-installed
-* run in project root directory: docker compose --profile racedisplay up --build
+installed and running
+* open a console in the project root directory and type: 'docker compose --profile racedisplay up'
+* wait for docker to download, build and run the servers (the first time, this can take several minutes)
 * visit "localhost:8080" in your browser and create a game.
 * Open Drift-App, enter the local ip-adress of the server (on windows: open cmd, type "ipconfig" to see the ip adresses) with a /game at the end (example: 192.188.22.54/game) as the server uri and choose the same game_id as when you created the game.
 * Start the game and drive. You should see the round times appearing on the score board.
-
-
+* you can stop the servers by closing the console window. If you want to completely remove the servers (resetting them), type 'docker compose down' in the console window.
 
 # driftapi
 An openapi proposal and reference server implementation for submitting sturmkind app's racing information
@@ -69,7 +69,14 @@ Make sure that docker (https://www.docker.com/products/docker-desktop/) is insta
 
 After cloning the repository, you can startup the service by running
 
+docker compose --profile racedisplay up
+
+or
+
 docker compose --profile racedisplay up --build
+
+(the last one rebuilds the containers in case code changes where made. Make sure to run 'docker compose down' before)
+
 
 in the root directory of the project (the one containing the docker-compose.yml file). This will build and then start three containers:
 
