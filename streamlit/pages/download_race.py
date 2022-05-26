@@ -65,7 +65,7 @@ def app():
                 if joker_lap_code != None:
                     d["Joker"] = int(r["joker_laps_counter"]) if "joker_laps_counter" in r else 0
 
-                if r["end_data"]:
+                if "end_data" in r:
                     d = {**d, **r["enter_data"], **r["start_data"], **r["end_data"]}
                     
 

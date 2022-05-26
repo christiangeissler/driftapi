@@ -107,7 +107,11 @@ Happens rarely, just follow the instructions in [solution: reset](#solution:-res
 Make sure there are no containers running. In the Docker Desktop GUI, click on the top button in the left sidebar ("Containers/Apps"). Stop all containers that are visible there and delete them. After that, click on "Images" in the left sidebar. Delete all of them here as well. Then do the same with the "Volumes" below. Then follow the instructions in the [Installation](#installation) chapter right after Docker is installed.
 
 ## The IP under Connection Info is not correct ##
-The problem is known and is on the "todo" list. Find out the IP of the laptop the server is running on manually, e.g. using the console command "ipconfig" under windows or "ifconfig" under linux/ios.
+The problem is known and is on the "todo" list. Determine the IP of the laptop on which the server is running manually, e.g. via the console command "ipconfig" under windows or "ifconfig" under linux/ios. Then open the file ".env" in the root directory of the project and change the line
+
+>STREAMLIT_HOSTNAME=127.0.0.1
+
+so that instead of 127.0.0.1 it says your host IP. With my Windows PC I get several different network addresses via the command "ipconfig" for example, the correct one is the one under "Ethernet-Adapter Ethernet", because my PC is connected via cable to my WLAN router. If you are with the PC directly in the WLAN, then better look for a WIFI adapter, but it is important that the adapter name does not contain "vEthernet", because that is only a virtual network adapter of docker.
 
 ## The drift app does not find the server ##
 Check if you are using the correct IP address (if necessary determine it manually, see above points). If the address is correct, but no race with this name exists, then a red cross appears in the app. In this case, simply create a race on the server with this name.
