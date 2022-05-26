@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import qrcode
 from PIL import Image
+from math import floor
 
 from  .session import fetch_post, fetch_put, fetch_get
 from .singletons import settings, logger
@@ -107,27 +108,43 @@ def app():
             st.markdown(hide_dataframe_row_index, unsafe_allow_html=True)
 
             def showTime(s):
-                return round(float(s),2) if not((s is None) or s== '') else 0.0
+                if ((s is None) or s==''):
+                    return ''
+                s = float(s)
+                ms = floor((s % 1)*1000)
+                s = floor(s)
+                m = floor(s / 60)
+                s = s -60*m
+                return f"{m:02d}:{s:02d}:{ms:03d}"
+                #return round(float(s),2) if not((s is None) or s== '') else None
 
             def constructEntry(r:dict):
                 d = {
                     "Spieler":r["user_name"] if "user_name" in r else "",
-                    "Beste[s]":showTime(r["best_lap"]) if "best_lap" in r else None,
-                    "Letzte[s]":showTime(r["last_lap"]) if "last_lap" in r else None,
                     "Runden":r["laps_completed"] if "laps_completed" in r else 0,
-                    "Punkte":r["total_score"] if "total_score" in r else 0,
-                    "Zeit[s]":showTime(r["total_time"]) if "total_time" in r else None,
+                    "Beste":showTime(r["best_lap"]) if "best_lap" in r else showTime(None),
+                    "Letzte":showTime(r["last_lap"]) if "last_lap" in r else showTime(None),
+                    #"Punkte":r["total_score"] if ("total_score" in r) and (not (r["total_score"] is None)) else 0,
+                    "Gesamtzeit":showTime(r["total_time"]) if "total_time" in r else showTime(None),
                 }
 
                 if joker_lap_code != None:
                     d["Joker"] = int(r["joker_laps_counter"]) if "joker_laps_counter" in r else 0
-                    
+
+                if r["end_data"]:
+                    d["Status:"] = "Finished"
+                elif r["start_data"]:
+                    d["Status:"] = "Driving"
+                elif r["enter_data"]:
+                    d["Status:"] = "Ready"
+                else:
+                    d["Status:"] = ""
 
                 return d
 
             scoreboard_data = [constructEntry(r) for r in scoreboard_data if (type(r) is dict)]
             #if there is no entry, just add an empty one by calling the construct Entry with an empty dict
-            while len(scoreboard_data)<4:
+            while len(scoreboard_data)<1:
                 scoreboard_data.append(constructEntry({}))
             df = pd.DataFrame( scoreboard_data )
             st.dataframe(df)
