@@ -132,7 +132,7 @@ The technical description of the API can be found in this folder in the file "op
 
 >localhost:8080/docs
 
-You can import the OpenAPI file to [postman](https://www.postman.com/) or (swagger.io)[swagger.io] to view it.
+You can import the OpenAPI file to [postman](https://www.postman.com/) or [swagger.io](swagger.io) to view it.
 
 If you have further questions, I recommend to ask them directly in the [Sturmkind Forum](https://community.sturmkind.com) in the corresponding section about the Community API, so that others can benefit from the answers there.
 

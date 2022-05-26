@@ -1,5 +1,5 @@
 # Dr!ft Community API Racing Server #
-[English Manual](Readme_EN.md)
+[English Manual](README_EN.md)
  
 * [Was ist das hier?](#einleitung)
 * [Wie installier ich das?](#installation)
@@ -48,7 +48,7 @@ Wechsle in den Ordner des Servers (in dem auch diese Anleitung steht), öffne ei
 Darauf sollte jede Menge Text in der Konsole erscheinen, sobald aber die Zeilen mit "Created" die auch bei der Installation erscheinen zu sehen sind, laufen die Dienste und der Server kann benutzt werden. Sie folgendes Kapitel zur Bedienung.
 
 # Bedienung
-Öffne einen Browser deiner Wahl und gib die folgende adresse ein:
+Öffne einen Browser deiner Wahl und gib die folgende Adresse ein:
 
 >localhost:8080
 
@@ -133,7 +133,7 @@ Die technische Beschreibung der API findest du in diesem Ordner in der Datei "op
 
 >localhost:8080/docs
 
-Die OpenAPI datei kannst du z.B. auf [postman](https://www.postman.com/) oder (swagger.io)[swagger.io] importieren um sie anzuschauen.
+Die OpenAPI datei kannst du z.B. auf [postman](https://www.postman.com/) oder [swagger.io](swagger.io) importieren um sie anzuschauen.
 
 Wenn du darüber hinaus weitere Fragen hast, empfehle ich diese direkt im [Sturmkind Forum](https://community.sturmkind.com) in der entsprechenden Rubrik zur Community API zu stellen, damit von den Antworten dort auch andere profitieren können.
 
