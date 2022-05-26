@@ -48,6 +48,15 @@ class target_code(int, Enum):
     drift_ice = 7 # Rally
     drift_sand = 7 # Rally Cross
 
+class PingResponse(BaseModel):
+    status:bool = Field(None, example=True)
+    start_time:Optional[datetime]
+    lap_count:Optional[int] = Field(None, title="number of rounds (for the race mode)")
+    track_condition:Optional[ track_condition]
+    track_bundle:Optional[ track_bundle]
+    wheels:Optional[ wheels]
+    setup_mode:Optional[ setup_mode]
+
 class EnterData(BaseModel):
     game_mode: game_mode
     start_time:Optional[datetime]
@@ -56,11 +65,11 @@ class EnterData(BaseModel):
     track_bundle: track_bundle
     wheels: wheels
     setup_mode: setup_mode
-    engine_type: str = Field(None, title="The id of the motor type. No ENUM for the above reason. Example: 'DTM', 'V8' etc.") 
-    tuning_type: str = Field(None, title="The id of the motor setup. No ENUM for the above reason. Example: 'DTM', 'V8' etc.")  #according to the app-internal id for the different motor setups. No ENUM for the above reason.
-    steering_angle: float = Field(None, title="the choosen steering angle as set in the settings menue of the app")
-    softsteering:bool = Field(None, title="if softsteering is enabled in the settings menue of the app.")
-    driftassist:bool = Field(None, title="if driftassist is enabled in the settings menue of the app.")
+    engine_type: str = Field(None, title="The id of the motor type. No ENUM because this might get extended. Example: 'DTM', 'V8' etc.", example="V8") 
+    tuning_type: str = Field(None, title="The id of the motor setup. No ENUM because this might get extended.", example="BASIC SETUP 550 PS")
+    steering_angle: float = Field(None, title="the choosen steering angle as set in the settings menue of the app", example=70.0)
+    softsteering:bool = Field(None, title="if softsteering is enabled in the settings menue of the app.", example=False)
+    driftassist:bool = Field(None, title="if driftassist is enabled in the settings menue of the app.", example=True)
 
     @validator('start_time', pre=True)
     def blank_string(value, field):
@@ -74,22 +83,22 @@ class StartData(BaseModel):
 class TargetData(BaseModel):
     crossing_time: datetime
     target_code: target_code
-    false_start: bool
-    driven_distance:float
-    driven_time:float
-    score:int
+    false_start: bool = Field(None, title="This is true whenever a false start was detected at the beginning of the race.", example=False)
+    driven_distance:float = Field(None, title="The distance driven so far", example=23.0)
+    driven_time:float = Field(None, title="Time in seconds the player is driving so far in this race", example=42.0)
+    score:int = Field(None, title="Amount of points awarded for this target. Work in progress.", example=100)
 
 class EndData(BaseModel):
     finished_time: datetime
-    false_start: bool
-    total_score: int
-    total_driven_distance: float
-    total_driven_time: float
+    false_start: bool = Field(None, title="This is true whenever a false start was detected at the beginning of the race.", example=False)
+    total_score: int = Field(None, title="The total achieved score at the very end.", example=1000)
+    total_driven_distance: float = Field(None, title="The distance driven in this race", example=123.0)
+    total_driven_time: float = Field(None, title="Time in seconds the player was driving so far in this race", example=122.0)
 
 
 class RaceEvent(BaseModel):
-    app_version:str
-    game_id: str = Field(None, title="The id of the game that has been opened.", example="Race1")
+    app_version:str = Field(None, title="A string representing the app version the user is running.", example="V.1.14.15_A")
+    game_id: str = Field(None, title="The id of the game that has been opened. This should be the same as the one provided via the uri.", example="Race1")
     user_id: UUID = Field(None, title="unique user id", description="unique identifier (for the duration of the current race), can and should be different from the Sturmkind user name for legal and security reasons, for example a hash of the username or a hash of the devices ip address.")
     user_name: str = Field(None, title="the name choosen by the user to be displayed on the scoreboard", description="Can be different from the Sturmkind user name (for legal reasons)", example="PlayerNo1")
     time: datetime = Field(None, title="the exact timestamp down to the precision the sturmkind app uses, so fractions of a second")
