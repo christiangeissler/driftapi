@@ -84,7 +84,12 @@ class DbClient:
                             playerStatus.best_lap = str(new_lap_time.total_seconds())
                     else:
                         playerStatus.best_lap = str(new_lap_time.total_seconds())
-                playerStatus.last_lap_timestamp = obj.data.crossing_time
+                    playerStatus.last_lap_timestamp = obj.data.crossing_time
+                else:
+                    #this is only active when the target finished is crossed the first time, as in that case, there is no last_lap_timestamp set:
+                    #for the first lap, we count the time since the signal time, not the first crossing. This is how it is done in the drift app.
+                    playerStatus.last_lap_timestamp = playerStatus.start_data.signal_time
+
             if obj.data.score>0:
                 playerStatus.total_score += obj.data.score
                 
