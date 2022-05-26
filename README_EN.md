@@ -46,6 +46,13 @@ Change to the folder of the server (where this tutorial is), open a console and 
 
 You should see a lot of text in the console, but as soon as you see the lines with "Created" which also appear during the installation, the services are running and the server can be used. See the following chapter for operation.
 
+# Stop
+Close the console window or press "Ctrl + C" in the console window to stop the running processes. Entering the command
+
+>docker compose --profile racedisplay down
+
+removes the containers from the system and is recommended for a clean exit.
+
 # Operation
 Open a browser of your choice and enter the following address:
 
@@ -56,14 +63,10 @@ You should get to the main menu of the server, from where you can create races (
 ## Create New Game
 Choose a Game ID without spaces. Tip: Choose short, simple identifiers, because the players have to enter them in the app. Then click on "Create" to create a race or select "Optional settings" beforehand to make settings for the players. When a player synchronizes with the server, the settings selected here will be used as race settings (note: the players can still change these afterwards, these are only a "suggestion"). On the left side at "Enable..." a check mark must be set at an option, on the right side the concrete value is set. Most options should be self-explanatory, so here are just a few hints for the more complicated ones:
 
-* Track name
-* The track name. Currently not used, but is intended to be included in the data export.
-* Enable time limit
-* Currently not used, but will be used later for server-side implemented time races.
-* Enable Joker Lap Counter
-* If this option is set, the joker lap counter will be incremented as soon as the selected target is passed. Note: If this is the start/finish target, then both a normal lap and a joker lap will be counted.
-* Enable precondition
-* If you drive Rallycross or Rally, you probably need the normal targets for other purposes. In this case you can set here which other target has to be passed before the actual joker target selected above, so that it counts as a joker target. Attention: There must always be some time between the recognition of two targets, otherwise the second target will not be recognized. This is necessary because sometimes targets are placed twice or even three times so that they are recognized in any case.
+* Track name - Currently not used, but is intended to be included in the data export.
+* Enable time limit - Currently not used, but will be used later for server-side implemented time races.
+* Enable Joker Lap Counter - If set, the joker lap counter will be incremented as soon as the selected target is passed. Note: If this is the start/finish target, then both a normal lap and a joker lap will be counted.
+* Enable precondition - If you drive Rallycross or Rally, you probably need the normal targets for other purposes. In this case you can set here which other target has to be passed before the actual joker target selected above, so that it counts as a joker target. Attention: There must always be some time between the recognition of two targets, otherwise the second target will not be recognized. This is necessary because sometimes targets are placed twice or even three times so that they are recognized in any case.
 
 After clicking on the "Create" button, a race is created and you switch to the race view.
 
@@ -74,14 +77,10 @@ Below the table there are two fold-out menus. Under "Game Settings" you can see 
 
 At the bottom there are four buttons:
 
-* Download
-* Here you can download the current race data as .csv or .json file to import it e.g. into Excel.
-* Remove Player
-* Deletes a specific player name from the table (if something went wrong).
-* Reset Game
-* Deletes ALL results from the list, but the race remains.
-* Delete Game
-* Deletes the complete race and all related data from the server and returns to the main menu
+* Download - Here you can download the current race data as .csv or .json file to import it e.g. into Excel.
+* Remove Player - Deletes a specific player name from the table (if something went wrong).
+* Reset Game - Deletes ALL results from the list, but the race remains.
+* Delete Game - Deletes the complete race and all related data from the server and returns to the main menu
 
 # Errors and solutions
 

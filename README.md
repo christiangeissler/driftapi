@@ -47,6 +47,13 @@ Wechsle in den Ordner des Servers (in dem auch diese Anleitung steht), öffne ei
 
 Darauf sollte jede Menge Text in der Konsole erscheinen, sobald aber die Zeilen mit "Created" die auch bei der Installation erscheinen zu sehen sind, laufen die Dienste und der Server kann benutzt werden. Sie folgendes Kapitel zur Bedienung.
 
+# Stop
+Schließe das Konsolenfenster oder drücke im Konsolenfenster "Strg + C" um die laufenden Prozesse zu beenden. Die Eingabe des Befehls
+
+>docker compose --profile racedisplay down
+
+entfernt die container vom system und ist für ein sauberes Beenden empfohlen.
+
 # Bedienung
 Öffne einen Browser deiner Wahl und gib die folgende Adresse ein:
 
@@ -57,14 +64,10 @@ Du solltest ins Hauptmenü des Servers kommen, von wo aus du Rennen anlegen (Cre
 ## Create New Game
 Wähle eine Game ID ohne Leerzeichen. Tipp: Wähle kurze, einfache Bezeichner, da die Spieler diese ja auch in der App eingeben müssen. Dann klicke auf "Create" um ein Rennen anzulegen oder wähle zuvor "Optional settings" um Einstellungen für die Spieler vorzunehmen. Wenn sich ein Spieler mit dem Server synchronisiert, dann werden die hier gewählten Einstellungen als Renneinstellungen übernommen (Achtung: Die Spieler können diese anschließend immer noch ändern, diese sind nur ein "Vorschlag"). Auf der linken Seite bei "Enable..." muss bei einer Option ein Haken gesetzt werden, auf der rechten Seite wird der konkrete Wert eingestellt. Die meisten Optionen sollten Selbsterklärend sein, daher hier nur ein paar Hinweise zu den komplizierteren:
 
-* Track name
-*  Der Rennstrecken-Name. Wird derzeit nicht genutzt, ist aber dafür vorgesehen, beim Datenexport mit angegeben zu werden.
-* Enable time limit
-*  Wird derzeit nicht genutzt, wird später für serverseitig umgesetzte Zeitrennen verwendet werden.
-* Enable Joker Lap Counter
-*  Wenn diese Option gesetzt wird, dann wird sobald das ausgewählte Target überfahren wird, der Joker-Lap Counter hochgezählt. Achtung: Wenn dies das start/finish Target ist, dann wird sowohl eine normale Runde als auch eine Joker-Runde gezählt.
-* Enable precondition
-*  Falls ihr Rallycross oder Rally fahrt, braucht ihr die normalen Targets vermutlich für andere Zwecke. In diesem Fall könnt ihr hier einstellen, welches andere Target vor dem eigentlichen oben ausgewählten Joker-Target überfahren werden muss, damit es als Joker-Target zählt. Achtung: Zwischen der Erkennung zweier Targets muss immer etwas Zeit vergehen, sonst wird das zweite Target nicht erkannt. Das ist nötig, weil man manchmal Targets zweifach oder sogar dreifach legt damit die auf jeden Fall erkannt werden.
+* Track name - Der Rennstrecken-Name. Wird derzeit nicht genutzt, ist aber dafür vorgesehen, beim Datenexport mit angegeben zu werden.
+* Enable time limit - Wird derzeit nicht genutzt, wird später für serverseitig umgesetzte Zeitrennen verwendet werden.
+* Enable Joker Lap Counter - Wenn diese Option gesetzt wird, dann wird sobald das ausgewählte Target überfahren wird, der Joker-Lap Counter hochgezählt. Achtung: Wenn dies das start/finish Target ist, dann wird sowohl eine normale Runde als auch eine Joker-Runde gezählt.
+* Enable precondition - Falls ihr Rallycross oder Rally fahrt, braucht ihr die normalen Targets vermutlich für andere Zwecke. In diesem Fall könnt ihr hier einstellen, welches andere Target vor dem eigentlichen oben ausgewählten Joker-Target überfahren werden muss, damit es als Joker-Target zählt. Achtung: Zwischen der Erkennung zweier Targets muss immer etwas Zeit vergehen, sonst wird das zweite Target nicht erkannt. Das ist nötig, weil man manchmal Targets zweifach oder sogar dreifach legt damit die auf jeden Fall erkannt werden.
 
 Nachdem man auf den Button "Create" geklickt hat, wird ein entsprechend benanntes Rennen angelegt und man wechselt in die Rennansicht.
 
@@ -75,14 +78,10 @@ Unter der Tabelle gibt es zwei ausklappbare Menüs. Unter "Game Settings" sieht 
 
 Ganz unten stehen noch vier Buttons:
 
-* Download
-*  Hier können die aktuellen Renndaten als .csv oder .json herunter geladen werden, um sie anschließend z.B. in Excel zu importieren.
-* Remove Player
-*  Löscht einen bestimmten Spielernamen aus der Tabelle (wenn mal was schief gelaufen ist)
-* Reset Game
-*  Löscht ALLE Ergebnisse aus der Liste, das Rennen bleibt aber erhalten.
-* Delete Game
-*  Löscht das komplette Rennen und alle dazugehörigen Daten vom Server und kehrt ins Hauptmenü zurück
+* Download - Hier können die aktuellen Renndaten als .csv oder .json herunter geladen werden, um sie anschließend z.B. in Excel zu importieren.
+* Remove Player - Löscht einen bestimmten Spielernamen aus der Tabelle (wenn mal was schief gelaufen ist)
+* Reset Game - Löscht ALLE Ergebnisse aus der Liste, das Rennen bleibt aber erhalten.
+* Delete Game - Löscht das komplette Rennen und alle dazugehörigen Daten vom Server und kehrt ins Hauptmenü zurück
 
 # Fehler und Lösungen
 
