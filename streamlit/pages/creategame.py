@@ -1,9 +1,9 @@
 import streamlit as st
 from zoneinfo import ZoneInfo #to set the timezone to german time
 from enum import Enum
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from  .session import fetch_post, fetch_put
-from .singletons import settings
+from .singletons import settings, logger
 from .model import track_condition, track_bundle, wheels, setup_mode, target_code
 
 
@@ -36,9 +36,13 @@ def app():
                 with columnLeft:
                     start_time_enabled = st.checkbox("Enable start time", value=False, key=None, help=None, on_change=None)
                 with columnRight:
+     
+                    time1 = datetime.now(tz=ZoneInfo("Europe/Berlin"))
+                    timedelta_1 = time1.utcoffset()
                     start_time = st.time_input('Start time (Local)', value=datetime.now(tz=ZoneInfo("Europe/Berlin")), key=None, help=None, on_change=None, disabled = False)
-                    start_time = datetime.combine(datetime.today(), start_time)
+                    start_time = datetime.combine(datetime.today(), start_time)-timedelta_1
                     start_time = start_time.astimezone(timezone.utc)
+
 
 
             with st.container():
