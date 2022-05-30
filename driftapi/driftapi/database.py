@@ -55,13 +55,6 @@ class DbClient:
             #check if joker lap should be increased:
 
             if game.joker_lap_code == obj.data.target_code:
-                logger.info("JOKER LAP CALCULATION")
-                logger.info("Conditions:")
-                logger.info(game.joker_lap_code)
-                logger.info(game.joker_lap_precondition_code)
-                logger.info("Status:")
-                logger.info(obj.data.target_code)
-                logger.info(playerStatus.last_recognized_target)
                 if not game.joker_lap_precondition_code:
                     playerStatus.joker_laps_counter += 1
                     logger.info("Joker lap without precondition triggered")
@@ -156,6 +149,7 @@ class DbClient:
             last_recognized_target = None,
             joker_laps_counter = 0,
             enter_data = obj.data,
+            start_data = None,
             end_data = None
         )
 

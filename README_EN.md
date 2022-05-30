@@ -39,15 +39,14 @@ Now this may take a while because Docker has a lot to do. But the nice thing is 
 
 This means that everything worked and the racing server is already running in the background. You can stop the server by pressing "Ctrl+C" in the console.
 
-# Start
-Change to the folder of the server (where this tutorial is), open a console and write:
+# Start & Stop
+Change to the server's folder (which also contains these instructions), open a console and write:
 
 >docker compose --profile racedisplay up
 
 You should see a lot of text in the console, but as soon as you see the lines with "Created" which also appear during the installation, the services are running and the server can be used. See the following chapter for operation.
 
-# Stop
-Close the console window or press "Ctrl + C" in the console window to stop the running processes. Entering the command
+To stop the server, close the console window or press "Ctrl + C" in the console window to stop the running processes. Entering the command
 
 >docker compose --profile racedisplay down
 

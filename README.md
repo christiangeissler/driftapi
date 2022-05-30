@@ -40,15 +40,14 @@ Das kann jetzt eine Weile dauern, weil Docker eine ganze Menge zu tun hat. Das S
 
 Das bedeutet, dass alles geklappt hat und der Racingserver sogar schon im Hintergrund läuft. Beenden könnt ihr den Server indem ihr in der Konsole "Str+C" drückt.
 
-# Start
+# Start & Stop
 Wechsle in den Ordner des Servers (in dem auch diese Anleitung steht), öffne eine Konsole und schreibe:
 
 >docker compose --profile racedisplay up
 
-Darauf sollte jede Menge Text in der Konsole erscheinen, sobald aber die Zeilen mit "Created" die auch bei der Installation erscheinen zu sehen sind, laufen die Dienste und der Server kann benutzt werden. Sie folgendes Kapitel zur Bedienung.
+Darauf sollte jede Menge Text in der Konsole erscheinen, sobald aber die Zeilen mit "Created", die auch bei der Installation erscheinen, zu sehen sind, laufen die Dienste und der Server kann benutzt werden. Siehe folgendes Kapitel zur Bedienung.
 
-# Stop
-Schließe das Konsolenfenster oder drücke im Konsolenfenster "Strg + C" um die laufenden Prozesse zu beenden. Die Eingabe des Befehls
+Zum stoppen des Servers, schließe das Konsolenfenster oder drücke im Konsolenfenster "Strg + C" um die laufenden Prozesse zu beenden. Die Eingabe des Befehls
 
 >docker compose --profile racedisplay down
 

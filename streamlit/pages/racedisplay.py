@@ -131,9 +131,9 @@ def app():
                 if joker_lap_code != None:
                     d["Joker"] = int(r["joker_laps_counter"]) if "joker_laps_counter" in r else 0
 
-                if "end_data" in r:
+                if ( ( "end_data" in r ) and not ( r["end_data"] is None ) ):
                     d["Status:"] = "Finished"
-                elif "start_data" in r:
+                elif ( ( "start_data" in r ) and not ( r["start_data"] is None ) ):
                     d["Status:"] = "Driving"
                 elif "enter_data" in r:
                     d["Status:"] = "Ready"
