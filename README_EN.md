@@ -1,4 +1,4 @@
-# Dr!ft Community API Racing Server
+# Dr!ft Community API & Racing Server
  
 * [What is this?](#introduction)
 * [How do I install this?](#installation)
