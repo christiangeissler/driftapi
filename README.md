@@ -1,4 +1,4 @@
-# Dr!ft Community API Racing Server #
+# Dr!ft Community API & Racing Server #
 [English Manual](README_EN.md)
  
 * [Was ist das hier?](#einleitung)
