@@ -19,23 +19,25 @@ Zunächst musst du die Software "Docker" installieren. Diese gibt es für Window
 
 https://www.docker.com/products/docker-desktop
 
-Docker dient als Ausführungsumgebung für die Server. Während der Installation wirst du eventuell gefragt, ob du eine Virtualisierungsumgebung, unter Windows z.B. WSL2 installieren möchtest, dass musst du bestätigen damit es funktioniert. Eventuell ist danach auch ein Neustart notwenig.
+Unter Windows musst du noch das Kernel-Upgrade für WSL2 installieren:
+https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
 
-Als Zweites musst du dieses Projekt hier herunter laden. Dazu kannst du oben rechts auf den grünen "Code" Button klicken und wählst "Download ZIP" aus. Das Verzeichnis musst du anschließend noch entpacken, die meisten Computer haben dafür schon Software installiert, falls nicht, empfehle ich dafür: [7Zip - Download](https://www.7-zip.de/).
+Und Hyper-V sowie Containers in den Windows Einstellungen aktivieren:
+https://www.c-sharpcorner.com/article/how-to-install-docker-desktop-and-troubleshoot-issues-in-windows-machine/
 
-Öffne anschließend im entpackten Ordner ein Konsolenfenster. Unter Windows geht das über "Shift+Rechtsklick"->"PowerShell Fenster hier öffnen". Als Test ob die Installation von Docker geklappt hat, kanns du mal
+Um zu testen, dass du Docker richtig installiert hast, öffne eine Konsole (Unter Windows geht das über "Shift+Rechtsklick"->"PowerShell Fenster hier öffnen") und tippe den folgenden Befehl, gefolgt von "Enter":
 
 >docker run hello-world
 
-eintippen. Dort sollte dann ein wenig Text und ein "Hello World" irgendwo auftauchen. Falls das nicht klappt, stell sicher, dass Docker im Hintergrund läuft (Docker Desktop 
+Docker dient als Ausführungsumgebung für die Server, diese laufen als virtuelle Maschinen in Docker, so dass wir keine weitere Software direkt auf deinem PC installieren müssen.
 
-Wenn das läuft, empfehle ich zunächst, [wie hier beschrieben](#die-ip-unter-connection-info-stimmt-nicht), die IP-Adresse deines Computers einzutragen. Das ist Optional, sorgt aber für einen korrekten QR-Code mit dem die Spieler einfacher beitreten können.
+Als Zweites musst du dieses Projekt hier herunter laden. Dazu kannst du oben rechts auf den grünen "Code" Button klicken und wählst "Download ZIP" aus. Das Verzeichnis musst du anschließend noch entpacken, die meisten Computer haben dafür schon Software installiert, falls nicht, empfehle ich dafür: [7Zip - Download](https://www.7-zip.de/).
 
-Anschließend kannst du den eigentlichen Racingserver installieren und starten indem du in die gleiche Konsole wie vorher den folgenden Befehl eintippst (oder den Befehl kopierst und in der Konsole einen Rechtsklick machst, das fügt den Text da ein):
+Jetzt folgt der letzte Schritt: Öffne wieder ein Konsolenfenster, wie schon oben beschrieben und gebe den folgenden Befehl ein:
 
 >docker compose --profile racedisplay up --build
 
-Das kann jetzt eine Weile dauern, weil Docker eine ganze Menge zu tun hat. Das Schöne ist aber, dass man das nur ein mal am Anfang machen muss bzw. nur wenn man den Code ändert. Nachdem der Befehl fertig ist, sollte dort so etwas wie folgendes stehen:
+Das kann jetzt eine Weile dauern (5-10 Minuten), weil Docker eine ganze Menge zu tun hat. Das Schöne ist aber, dass man das nur ein mal am Anfang machen muss bzw. nur wenn man den Code ändert. Nachdem der Befehl fertig ist, sollte dort so etwas wie folgendes stehen:
 
 >[+] Running 4/4
 > - Network driftapi_default                  Created
@@ -46,7 +48,7 @@ Das kann jetzt eine Weile dauern, weil Docker eine ganze Menge zu tun hat. Das S
 >                                                               0.2s
 > - Container driftapi-driftapi-service-1     Created                                                               0.2s
 
-Das bedeutet, dass alles geklappt hat und der Racingserver sogar schon im Hintergrund läuft. Beenden könnt ihr den Server indem ihr in der Konsole "Str+C" drückt.
+Das bedeutet, dass alles geklappt hat und der Racingserver sogar schon im Hintergrund läuft. Das folgende Kapitel kannst du überspringen und direkt bei [Bedienung](#bedienung) weiter machen.
 
 # Start & Stop
 Wechsle in den Ordner des Servers (in dem auch diese Anleitung steht), öffne eine Konsole und schreibe:
@@ -105,12 +107,12 @@ Ganz unten stehen noch vier Buttons:
 Das kann mehrere Gründe haben, die häufigsten sind hier aufgeführt:
 
 ### Grund 1: Docker läuft nicht im Hintergrund ###
-Der häufigste Grund ist der, dass der docker service nicht im Hintergrund läuft. Stell sicher, dass docker läuft. Standardmässig wird docker bei der Installation fragen, ob es automatisch bei systemstart gestartet werden soll. Wenn du dem nicht zugestimmt hast, dann starte docker selbst bevor du docker compose ausführst.
+Der häufigste Grund ist der, dass der docker service nicht im Hintergrund läuft. Stell sicher, dass docker läuft. Standardmässig wird docker bei der Installation fragen, ob es automatisch bei systemstart gestartet werden soll. Wenn du dem nicht zugestimmt hast, dann starte docker desktop selbst, bevor du docker compose ausführst. Schau ansonsten auch, welche Fehlermeldungen du angezeigt bekommst, wenn du Docker Desktop ausführst.
 
 ### Grund 2: Nicht genug Speicherplatz ###
 Der zweite häufige Grund ist mangelnder Speicherplatz. Stell sicher, dass auf deiner Systemfestplatte genug Platz frei ist (etwa 5GB). Wenn du den Server häufig benutzt, macht es ab und zu sinn, ältere docker dateien zu löschen. Wenn du Docker Desktop installiert hast, dann kannst du das recht einfach über die GUI erledigen. Siehe dazu [Lösung: Reset](#lösung:-reset).
 
-### Grund 3: Irgendwas ist beim erstellen der Dienste schief gegangen ###
+### Grund 3: Irgendwas ist beim Erstellen der Dienste schief gegangen ###
 Kann selten mal passieren, folge einfach den Anweisungen in  [Lösung: Reset](#lösung:-reset).
 
 ### Lösung: Reset ###
