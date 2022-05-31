@@ -124,10 +124,11 @@ Das Problem ist bekannt und steht auf der "Todo" Liste. Ermittel die IP des Lapt
 so, dass statt der 127.0.0.1 deine Host-IP steht. Bei meinem Windows PC bekomme ich über den Befehl "ipconfig" z.B. mehrere verschiedene Netzwerkadressen angezeigt, die richtige darunter ist die unter "Ethernet-Adapter Ethernet", weil mein PC über Kabel an meinem WLAN-Router hängt. Wenn du mit dem PC direkt im WLAN bist, dann halte besser nach einem WIFI adapter Ausschau, wichtig ist aber, dass der adaptername kein "vEthernet" enthält, das ist nur ein virtueller netzwerkadapter von docker.
 
 ## Die DRIFT-App findet den Server nicht ##
-Schau ob du die richtige IP-Adresse verwendest (notfalls manuell ermitteln, siehe obiger Punkte). Wenn die Adresse korrekt ist, aber kein Rennen mit diesem Namen existiert, dann erscheint in der App ein rotes Kreuz. In dem Fall, einfach auf dem Server ein entsprechend benanntes Rennen erstellen.
+Zunächst solltest du sicher stellen, dass dein Smartphone auf dem die DR!FT App läuft, im gleichen WLAN ist wie der Computer auf dem der Server läuft. Zuhause reicht es meist, wenn man z.B. einen Router mit einem WLAN hat und einen PC über LAN daran angeschlossen hat. Eine Alternative dazu sind Laptops, die ein Ad-Hoc WLAN aufmachen können.
+Als Zweites solltest du kontrollieren, ob du die richtige IP-Adresse verwendest (notfalls manuell ermitteln, siehe obiger Punkte). Wenn die Adresse korrekt ist, aber kein Rennen mit diesem Namen existiert, dann erscheint in der App ein rotes Kreuz. In dem Fall, einfach auf dem Server ein entsprechend benanntes Rennen erstellen.
 
 ## Die Zeiten im Racingserver stimmen nicht exakt mit denen in der App überein ##
-Es kann vorkommen, dass die Zeiten um wenige Millisekunden unterschiedlich sind, bisher sind mir Unterschiede um die +- 0.004 Sekunden aufgefallen. Dieser Fehler ist bekannt und steht schon auf der "Todo" Liste.
+Es kann vorkommen, dass die Zeiten um wenige (1-4) Millisekunden unterschiedlich sind. Dieser Fehler ist bekannt und steht auf der TODO-Liste.
 
 ## Ein Spieler steht doppelt in der Liste ##
 Das kann vorkommen, wenn zwei Spieler den gleichen Namen gewählt haben oder die App zwischendurch mal vollständig aus gewesen ist, oder man auf ein anderes Smartphone gewechselt ist. Da die API aus rechtlichen Gründen nicht automatisch eure echten Sturmkind-Account namen rausgeben darf, verwenden wir für die Zuordnung ein ab und zu wechselndes Merkmal. Ich empfehle, pro Rennen das ihr fahrt entweder immer auch ein neues Rennen im Server anzulegen, oder aber zwischendurch den Reset-Knopf zu drücken. Ihr könnte aber unter der Liste auch gezielt nur bestimmte Spielernamen aus der Liste löschen.
