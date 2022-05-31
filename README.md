@@ -27,7 +27,7 @@ Als Zweites musst du dieses Projekt hier herunter laden. Dazu kannst du oben rec
 
 >docker run hello-world
 
-eintippen. Dort sollte dann ein wenig Text und ein "Hello World" irgendwo auftauchen.
+eintippen. Dort sollte dann ein wenig Text und ein "Hello World" irgendwo auftauchen. Falls das nicht klappt, stell sicher, dass Docker im Hintergrund läuft (Docker Desktop 
 
 Wenn das läuft, empfehle ich zunächst, [wie hier beschrieben](#die-ip-unter-connection-info-stimmt-nicht), die IP-Adresse deines Computers einzutragen. Das ist Optional, sorgt aber für einen korrekten QR-Code mit dem die Spieler einfacher beitreten können.
 
