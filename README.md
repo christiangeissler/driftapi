@@ -29,7 +29,9 @@ Als Zweites musst du dieses Projekt hier herunter laden. Dazu kannst du oben rec
 
 eintippen. Dort sollte dann ein wenig Text und ein "Hello World" irgendwo auftauchen.
 
-Wenn das läuft, kannst du den Racingserver installieren und starten indem du in die gleiche Konsole den folgenden Befehl eintippst (oder den Befehl kopierst und in der Konsole einen Rechtsklick machst, das fügt den Text da ein):
+Wenn das läuft, empfehle ich zunächst, [wie hier beschrieben](#die-ip-unter-connection-info-stimmt-nicht), die IP-Adresse deines Computers einzutragen. Das ist Optional, sorgt aber für einen korrekten QR-Code mit dem die Spieler einfacher beitreten können.
+
+Anschließend kannst du den eigentlichen Racingserver installieren und starten indem du in die gleiche Konsole wie vorher den folgenden Befehl eintippst (oder den Befehl kopierst und in der Konsole einen Rechtsklick machst, das fügt den Text da ein):
 
 >docker compose --profile racedisplay up --build
 
