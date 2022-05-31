@@ -19,7 +19,9 @@ Zunächst musst du auf deinem PC die Software "Docker" installieren. Diese gibt 
 
 https://www.docker.com/products/docker-desktop
 
-Installier die Software, dann öffne ein Konsolenfenster im gleichen Ordner wo auch diese Anleitung hier liegt. Unter Windows geht das über "Shift+Rechtsklick"->"PowerShell Fenster hier öffnen". Als Test ob die Installation geklappt hat, kanns du mal
+Anschließend musst du dieses Projekt herunter laden. Dazu kannst du oben rechts hier auf github auf den grünen "Code" Button klicken und wählst "Download ZIP" aus. Das Verzeichnis musst du anschließend noch entpacken, die meisten Computer haben dafür schon Software installiert, falls nicht, empfehle ich dafür: [7Zip - Download](https://www.7-zip.de/).
+
+Öffne anschließend im entpackten Ordner ein Konsolenfenster. Unter Windows geht das über "Shift+Rechtsklick"->"PowerShell Fenster hier öffnen". Als Test ob die Installation geklappt hat, kanns du mal
 
 >docker run hello-world
 
