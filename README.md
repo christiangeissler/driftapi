@@ -121,7 +121,7 @@ Das Problem ist bekannt und steht auf der "Todo" Liste. Ermittel die IP des Lapt
 
 so, dass statt der 127.0.0.1 deine Host-IP steht. Bei meinem Windows PC bekomme ich über den Befehl "ipconfig" z.B. mehrere verschiedene Netzwerkadressen angezeigt, die richtige darunter ist die unter "Ethernet-Adapter Ethernet", weil mein PC über Kabel an meinem WLAN-Router hängt. Wenn du mit dem PC direkt im WLAN bist, dann halte besser nach einem WIFI adapter Ausschau, wichtig ist aber, dass der adaptername kein "vEthernet" enthält, das ist nur ein virtueller netzwerkadapter von docker.
 
-## Die DR!FT-App findet den Server nicht ##
+## Die DRIFT-App findet den Server nicht ##
 Schau ob du die richtige IP-Adresse verwendest (notfalls manuell ermitteln, siehe obiger Punkte). Wenn die Adresse korrekt ist, aber kein Rennen mit diesem Namen existiert, dann erscheint in der App ein rotes Kreuz. In dem Fall, einfach auf dem Server ein entsprechend benanntes Rennen erstellen.
 
 ## Die Zeiten im Racingserver stimmen nicht exakt mit denen in der App überein ##
