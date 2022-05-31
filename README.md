@@ -1,4 +1,4 @@
-# Dr!ft Community API & Racing Server #
+# DR!FT Community API & Racing Server #
 [English Manual](README_EN.md)
  
 * [Was ist das hier?](#einleitung)
@@ -6,13 +6,13 @@
 * [Wie starte und beende ich das?](#start)
 * [Wie bediene ich das?](#bedienung)
 * [Typische Fehler und wie man sie hoffentlich behebt](#fehler-und-lösungen)
-* [Dr!ft Community API](#drift-community-api)
+* [DR!FT Community API](#drift-community-api)
 
 
 # Einleitung
-Dieser Dr!ft Racingserver verfolgt zwei Ziele: Zum einen als Prototyp um die Dr!ft Community API zu entwickeln und zu testen, zum anderen um euch einen Ausblick darauf zu geben, was damit alles möglich ist. Der Dr!ft Racingserver kann lokal auf einem Laptop aufgesetzt werden und stellt euch dort dann eine Webseite bereit, auf der ihr Rennen anlegen, den Rennfortschritt der Teilnehmer anschauen und die Ergebnisse im Anschluss als .csv Datei für den Import in Excel & co herunter laden könnt.
+Dieser DR!FT Racingserver verfolgt zwei Ziele: Zum einen als Prototyp um die DR!FT Community API zu entwickeln und zu testen, zum anderen um euch einen Ausblick darauf zu geben, was damit alles möglich ist. Der DR!FT Racingserver kann lokal auf einem Laptop aufgesetzt werden und stellt euch dort dann eine Webseite bereit, auf der ihr Rennen anlegen, den Rennfortschritt der Teilnehmer anschauen und die Ergebnisse im Anschluss als .csv Datei für den Import in Excel & co herunter laden könnt.
 
-Achtung: Dieser Server ist nicht dazu geeignet, ihn offen ins Internet zu stellen. Die generierte Webseite hat z.B. keinerlei Sicherheitsmaßnahmen wie eine Benutzerverwaltung oder Passwortschutz, d.h. jeder der die Adresse der Webseite kennt kann dort Rennen anlegen, löschen etc.. Benutzt ihn also besser nur lokal und mit Leuten, die da keinen Mist mit machen. Wir werden in Zukunft sicherlich noch bessere Racingserver sehen, die dann im Internet laufen und auf denen jeder ohne Installation bequem selbst seine Rennen auf machen kann, aber das wird noch eine Weile dauern. Dieser Racingserver dient erst mal der schnellen Entwicklung einer soliden Basis. Wenn du mehr zur Entwicklung etc. wissen willst, schau mal ins Kapitel  [Dr!ft Community API](#drift-community-api)
+Achtung: Dieser Server ist nicht dazu geeignet, ihn offen ins Internet zu stellen. Die generierte Webseite hat z.B. keinerlei Sicherheitsmaßnahmen wie eine Benutzerverwaltung oder Passwortschutz, d.h. jeder der die Adresse der Webseite kennt kann dort Rennen anlegen, löschen etc.. Benutzt ihn also besser nur lokal und mit Leuten, die da keinen Mist mit machen. Wir werden in Zukunft sicherlich noch bessere Racingserver sehen, die dann im Internet laufen und auf denen jeder ohne Installation bequem selbst seine Rennen auf machen kann, aber das wird noch eine Weile dauern. Dieser Racingserver dient erst mal der schnellen Entwicklung einer soliden Basis. Wenn du mehr zur Entwicklung etc. wissen willst, schau mal ins Kapitel  [DR!FT Community API](#drift-community-api)
 
 # Installation
 Zunächst musst du die Software "Docker" installieren. Diese gibt es für Windows, iOS und Linux und eine bequeme Desktop-Version bekommst du hier:
@@ -94,7 +94,7 @@ Ganz unten stehen noch vier Buttons:
 
 * [Docker compose funktioniert nicht](#docker-compose-funktioniert-nicht)
 * [Die IP unter Connection Info stimmt nicht](#die-ip-unter-connection-info-stimmt-nicht)
-* [Die Drift-App findet den Server nicht](#die-drift-app-findet-den-server-nicht)
+* [Die DR!FT-App findet den Server nicht](#die-drift-app-findet-den-server-nicht)
 * [Die Zeiten im Racingserver stimmen nicht exakt mit denen in der App überein](#die-zeiten-im-racingserver-stimmen-nicht-exakt-mit-denen-in-der-app-überein)
 * [Ein Spieler steht doppelt in der Liste](#ein-spieler-steht-doppelt-in-der-liste)
 
@@ -121,7 +121,7 @@ Das Problem ist bekannt und steht auf der "Todo" Liste. Ermittel die IP des Lapt
 
 so, dass statt der 127.0.0.1 deine Host-IP steht. Bei meinem Windows PC bekomme ich über den Befehl "ipconfig" z.B. mehrere verschiedene Netzwerkadressen angezeigt, die richtige darunter ist die unter "Ethernet-Adapter Ethernet", weil mein PC über Kabel an meinem WLAN-Router hängt. Wenn du mit dem PC direkt im WLAN bist, dann halte besser nach einem WIFI adapter Ausschau, wichtig ist aber, dass der adaptername kein "vEthernet" enthält, das ist nur ein virtueller netzwerkadapter von docker.
 
-## Die Drift-App findet den Server nicht ##
+## Die DR!FT-App findet den Server nicht ##
 Schau ob du die richtige IP-Adresse verwendest (notfalls manuell ermitteln, siehe obiger Punkte). Wenn die Adresse korrekt ist, aber kein Rennen mit diesem Namen existiert, dann erscheint in der App ein rotes Kreuz. In dem Fall, einfach auf dem Server ein entsprechend benanntes Rennen erstellen.
 
 ## Die Zeiten im Racingserver stimmen nicht exakt mit denen in der App überein ##
@@ -130,8 +130,8 @@ Es kann vorkommen, dass die Zeiten um wenige Millisekunden unterschiedlich sind,
 ## Ein Spieler steht doppelt in der Liste ##
 Das kann vorkommen, wenn zwei Spieler den gleichen Namen gewählt haben oder die App zwischendurch mal vollständig aus gewesen ist, oder man auf ein anderes Smartphone gewechselt ist. Da die API aus rechtlichen Gründen nicht automatisch eure echten Sturmkind-Account namen rausgeben darf, verwenden wir für die Zuordnung ein ab und zu wechselndes Merkmal. Ich empfehle, pro Rennen das ihr fahrt entweder immer auch ein neues Rennen im Server anzulegen, oder aber zwischendurch den Reset-Knopf zu drücken. Ihr könnte aber unter der Liste auch gezielt nur bestimmte Spielernamen aus der Liste löschen.
 
-# Drift Community API
-Die Dr!ft Community API ist der Kern der Entwicklung und die Sturmkind Dr!ft App ist so programmiert, dass sie mit Servern die diese API implementieren kommunizieren kann. Kern der Überlegung ist, dass die App meist keine konkrete Antwort erwartet, sondern einfach immer nur wenn etwas Interessantes passiert (ein Rennen eingestellt, gestartet oder beendet oder ein Barcode gelesen wird) eine kurze Nachricht an die eingestellte URI verschickt. Dieses Projekt zeigt euch im Grunde genommen, wie man auf Basis der API einen Racingserver implementieren kann.
+# DR!FT Community API
+Die DR!FT Community API ist der Kern der Entwicklung und die Sturmkind DR!FT App ist so programmiert, dass sie mit Servern die diese API implementieren kommunizieren kann. Kern der Überlegung ist, dass die App meist keine konkrete Antwort erwartet, sondern einfach immer nur wenn etwas Interessantes passiert (ein Rennen eingestellt, gestartet oder beendet oder ein Barcode gelesen wird) eine kurze Nachricht an die eingestellte URI verschickt. Dieses Projekt zeigt euch im Grunde genommen, wie man auf Basis der API einen Racingserver implementieren kann.
 
 Dazu gehören im Grunde genommen drei Komponenten: Eine Datenbank (MongoDB), ein Backend (driftapi-service) und ein Frontend (racedisplay-service). Über den weiter oben genannten Startbefehl startet docker diese drei Komponenten in kleinen virtuellen Maschinen, damit keine weitere Software auf dem Host-System installiert werden muss. Dadurch sollte man dieses projekt auch auf windows, ios und linux gleichermaßen ausführen können.
 
