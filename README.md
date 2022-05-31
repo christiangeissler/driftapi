@@ -146,7 +146,7 @@ Langfristig wäre es besser, das ganze vollständig als Online-plattform zu impl
 
 Die technische Beschreibung der API findest du in diesem Ordner in der Datei "openapi.json" oder wenn du den server startest, in grafisch ansprechenderer Form unter der adresse 
 
->localhost:8080/docs
+>localhost:8001/docs
 
 Die OpenAPI datei kannst du z.B. auf [postman](https://www.postman.com/) oder [swagger.io](swagger.io) importieren um sie anzuschauen.
 
