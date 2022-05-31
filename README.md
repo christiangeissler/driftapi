@@ -150,7 +150,34 @@ Die technische Beschreibung der API findest du in diesem Ordner in der Datei "op
 
 Die OpenAPI datei kannst du z.B. auf [postman](https://www.postman.com/) oder [swagger.io](swagger.io) importieren um sie anzuschauen.
 
-Wenn du darüber hinaus weitere Fragen hast, empfehle ich diese direkt im [Sturmkind Forum](https://community.sturmkind.com) in der entsprechenden Rubrik zur Community API zu stellen, damit von den Antworten dort auch andere profitieren können.
+## API-Calls - Ablauf ##
+
+### /ping
+Wenn der Nutzer die API im Rennmenü aktiviert, versucht die App zunächst den /ping Endpunkt zu erreichen. Klappt dass, erscheint ein Grüner Haken in der App. Als Rückgabewert akzeptiert die App ausserdem ein JSON-Dictionary, mit dem in der App die Renneinstellungen überschrieben werden:
+
+>{
+>  "status": true,
+>  "start_time": "2022-05-31T18:40:45.194Z",
+>  "lap_count": 0,
+>  "track_condition": "drift_asphalt",
+>  "track_bundle": "none",
+>  "wheels": "normal",
+>  "setup_mode": "RACE"
+>}
+
+### /enter
+Wenn der Spieler das Rennen aus dem Menü heraus startet und das erste Mal das Armaturenbrett sieht, wird der /enter Endpunkt aufgerufen und die vom Spieler final gewählten Renneinstellungen, aber auch die Motoreinstellungen an den Server übertragen.
+
+### /start
+Wenn der Spieler den Motor anschaltet und der Countdown grün zeigt, wird der /start Endpunkt aufgerufen und die exakte Startzeit übermittelt.
+
+### /target
+Wenn der Spieler ein Target überfährt und die Punkte feststehen, wird der /target Endpunkt aufgerufen. Die übermittelten Informationen beinhalten den Code des Targets und den exakten Zeitpunkt, wann das Target erkannt wurde. Ausserdem noch die bisher gefahrene Distanz und Zeitdauer des Laufs sowie ob es am Anfang einen Frühstart gab.
+
+### /end
+Wenn der Spieler den Motor abschaltet und der Statistikbildschirm geladen wurde, wird der /end Endpunkt aufgerufen und die abschließenden Renninformationen wie die finale Gymkhana Punktzahl, die gefahrene Zeit und Distanz übermittelt.
+
+Wenn du darüber hinaus weitere Fragen hast, empfehle ich diese direkt im [Sturmkind Forum]([https://community.sturmkind.com](https://community.sturmkind.com/topic/3637-entwickler-informationen-zur-drft-community-api/)) in der entsprechenden Rubrik zur Community API zu stellen, damit von den Antworten dort auch andere profitieren können.
 
 # Wie geht es weiter?
 Mit der Veröffentlichung der Community API geht Sturmkind einen ersten Schritt in Richtung Multiplayerunterstützung. Aber der Weg ist noch lange nicht zuende, denn auch wenn man mit diesem Projekt hier einen ersten Racing-Server aufsetzen kann, so hat nicht jeder Nutzer Lust und Zeit, lokal einen eigenen Server zu betreiben. Wenn du selbst dich an der Weiterentwicklung oder einer Eigenentwicklung eines Servers versuchen möchtest, so bist du herzlich eingeladen, im Sturmkind Forum mit uns zu diskutieren, dein Projekt vorzustellen und dort auch Fragen zur API etc. zu stellen. Denn die Kernidee der API ist es gerade, dass wir als Community mit dieser alle Möglichen kreativen Dinge anstellen können.
