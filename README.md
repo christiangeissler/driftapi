@@ -135,7 +135,7 @@ Es kann vorkommen, dass die Zeiten um wenige (1-4) Millisekunden unterschiedlich
 ## Ein Spieler steht doppelt in der Liste ##
 Das kann vorkommen, wenn zwei Spieler den gleichen Namen gewählt haben oder die App zwischendurch mal vollständig aus gewesen ist, oder man auf ein anderes Smartphone gewechselt ist. Da die API aus rechtlichen Gründen nicht automatisch eure echten Sturmkind-Account namen rausgeben darf, verwenden wir für die Zuordnung ein ab und zu wechselndes Merkmal. Ich empfehle, pro Rennen das ihr fahrt entweder immer auch ein neues Rennen im Server anzulegen, oder aber zwischendurch den Reset-Knopf zu drücken. Ihr könnte aber unter der Liste auch gezielt nur bestimmte Spielernamen aus der Liste löschen.
 
-# DR!FT Community API
+# DRIFT Community API
 Die DR!FT Community API ist der Kern der Entwicklung und die Sturmkind DR!FT App ist so programmiert, dass sie mit Servern die diese API implementieren kommunizieren kann. Kern der Überlegung ist, dass die App meist keine konkrete Antwort erwartet, sondern einfach immer nur wenn etwas Interessantes passiert (ein Rennen eingestellt, gestartet oder beendet oder ein Barcode gelesen wird) eine kurze Nachricht an die eingestellte URI verschickt. Dieses Projekt zeigt euch im Grunde genommen, wie man auf Basis der API einen Racingserver implementieren kann.
 
 Dazu gehören im Grunde genommen drei Komponenten: Eine Datenbank (MongoDB), ein Backend (driftapi-service) und ein Frontend (racedisplay-service). Über den weiter oben genannten Startbefehl startet docker diese drei Komponenten in kleinen virtuellen Maschinen, damit keine weitere Software auf dem Host-System installiert werden muss. Dadurch sollte man dieses projekt auch auf windows, ios und linux gleichermaßen ausführen können.
