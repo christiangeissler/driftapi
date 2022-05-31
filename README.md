@@ -15,17 +15,21 @@ Dieser Dr!ft Racingserver verfolgt zwei Ziele: Zum einen als Prototyp um die Dr!
 Achtung: Dieser Server ist nicht dazu geeignet, ihn offen ins Internet zu stellen. Die generierte Webseite hat z.B. keinerlei Sicherheitsmaßnahmen wie eine Benutzerverwaltung oder Passwortschutz, d.h. jeder der die Adresse der Webseite kennt kann dort Rennen anlegen, löschen etc.. Benutzt ihn also besser nur lokal und mit Leuten, die da keinen Mist mit machen. Wir werden in Zukunft sicherlich noch bessere Racingserver sehen, die dann im Internet laufen und auf denen jeder ohne Installation bequem selbst seine Rennen auf machen kann, aber das wird noch eine Weile dauern. Dieser Racingserver dient erst mal der schnellen Entwicklung einer soliden Basis. Wenn du mehr zur Entwicklung etc. wissen willst, schau mal ins Kapitel  [Dr!ft Community API](#drift-community-api)
 
 # Installation
-Zunächst musst du auf deinem PC die Software "Docker" installieren. Diese gibt es für Windows, iOS und Linux und eine bequeme Desktop-Version bekommst du hier:
+Zunächst musst du die Software "Docker" installieren. Diese gibt es für Windows, iOS und Linux und eine bequeme Desktop-Version bekommst du hier:
 
 https://www.docker.com/products/docker-desktop
 
-Anschließend musst du dieses Projekt herunter laden. Dazu kannst du oben rechts hier auf github auf den grünen "Code" Button klicken und wählst "Download ZIP" aus. Das Verzeichnis musst du anschließend noch entpacken, die meisten Computer haben dafür schon Software installiert, falls nicht, empfehle ich dafür: [7Zip - Download](https://www.7-zip.de/).
+Docker dient als Ausführungsumgebung für die Server. Während der Installation wirst du eventuell gefragt, ob du eine Virtualisierungsumgebung, unter Windows z.B. WSL2 installieren möchtest, dass musst du bestätigen damit es funktioniert. Eventuell ist danach auch ein Neustart notwenig.
 
-Öffne anschließend im entpackten Ordner ein Konsolenfenster. Unter Windows geht das über "Shift+Rechtsklick"->"PowerShell Fenster hier öffnen". Als Test ob die Installation geklappt hat, kanns du mal
+Als Zweites musst du dieses Projekt hier herunter laden. Dazu kannst du oben rechts auf den grünen "Code" Button klicken und wählst "Download ZIP" aus. Das Verzeichnis musst du anschließend noch entpacken, die meisten Computer haben dafür schon Software installiert, falls nicht, empfehle ich dafür: [7Zip - Download](https://www.7-zip.de/).
+
+Öffne anschließend im entpackten Ordner ein Konsolenfenster. Unter Windows geht das über "Shift+Rechtsklick"->"PowerShell Fenster hier öffnen". Als Test ob die Installation von Docker geklappt hat, kanns du mal
 
 >docker run hello-world
 
-eintippen. Wenn das läuft, kannst du den Racingserver installieren indem du in die gleiche Konsole den folgenden Befehl eintippst (oder den Befehl kopierst und in der Konsole einen Rechtsklick machst, das fügt den Text da ein):
+eintippen. Dort sollte dann ein wenig Text und ein "Hello World" irgendwo auftauchen.
+
+Wenn das läuft, kannst du den Racingserver installieren und starten indem du in die gleiche Konsole den folgenden Befehl eintippst (oder den Befehl kopierst und in der Konsole einen Rechtsklick machst, das fügt den Text da ein):
 
 >docker compose --profile racedisplay up --build
 
@@ -53,7 +57,9 @@ Zum stoppen des Servers, schließe das Konsolenfenster oder drücke im Konsolenf
 
 >docker compose --profile racedisplay down
 
-entfernt die container vom system und ist für ein sauberes Beenden empfohlen.
+entfernt die container komplett vom system, das ist nützlich wenn mal was nicht so läuft wie es soll.
+
+Deinstallation: Für eine Deinstalation löscht ihr einfach den heruntergeladenen Ordner und deinstalliert die Software "Docker".
 
 # Bedienung
 Öffne einen Browser deiner Wahl und gib die folgende Adresse ein:
