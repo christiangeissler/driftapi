@@ -66,9 +66,9 @@ entfernt die container komplett vom system, das ist nützlich wenn mal was nicht
 Deinstallation: Für eine Deinstalation löscht ihr einfach den heruntergeladenen Ordner und deinstalliert die Software "Docker".
 
 # Bedienung
-Öffne einen Browser deiner Wahl und gib die folgende Adresse ein:
+Öffne einen Browser deiner Wahl (Chrome und Firefox sind getestet, Safari macht vielleicht Probleme) und gib die folgende Adresse ein:
 
->localhost:8080
+>127.0.0.1:8080
 
 Du solltest ins Hauptmenü des Servers kommen, von wo aus du Rennen anlegen (Create New Game) oder zuvor angelegte Rennen aufrufen (Show Game) kannst. Hinweis: Sobald ein Rennen angelegt wurde, nimmt der Server Daten von der App entgegen, unabhängig davon, ob du das Browserfenster offen lässt oder welches Rennen du gerade anzeigst. Du kannst also ruhig mehrere Rennen erstellen die gleichzeitig von Spielern genutzt werden.
 
