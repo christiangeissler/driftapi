@@ -165,6 +165,8 @@ Wenn der Nutzer die API im Rennmenü aktiviert, versucht die App zunächst den /
 >  "setup_mode": "RACE"
 >}
 
+Die Möglichen Rückgabewerte hier kann man auch gut im Datenmodell des Servers anschauen: [Klick hier](https://github.com/christiangeissler/driftapi/blob/main/driftapi/driftapi/model.py)
+
 ### /enter
 Wenn der Spieler das Rennen aus dem Menü heraus startet und das erste Mal das Armaturenbrett sieht, wird der /enter Endpunkt aufgerufen und die vom Spieler final gewählten Renneinstellungen, aber auch die Motoreinstellungen an den Server übertragen.
 
