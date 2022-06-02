@@ -127,7 +127,10 @@ so, dass statt der 127.0.0.1 deine Host-IP steht. Bei meinem Windows PC bekomme 
 
 ## Die DRIFT-App findet den Server nicht ##
 Zunächst solltest du sicher stellen, dass dein Smartphone auf dem die DR!FT App läuft, im gleichen WLAN ist wie der Computer auf dem der Server läuft. Zuhause reicht es meist, wenn man z.B. einen Router mit einem WLAN hat und einen PC über LAN daran angeschlossen hat. Eine Alternative dazu sind Laptops, die ein Ad-Hoc WLAN aufmachen können.
+
 Als Zweites solltest du kontrollieren, ob du die richtige IP-Adresse verwendest (notfalls manuell ermitteln, siehe obiger Punkte). Wenn die Adresse korrekt ist, aber kein Rennen mit diesem Namen existiert, dann erscheint in der App ein rotes Kreuz. In dem Fall, einfach auf dem Server ein entsprechend benanntes Rennen erstellen.
+
+Als Drittes kann es sein, dass deine Firewall die Verbindungen blockt. Normalerweise ist das gut, weil du nicht möchtest, dass irgendwelche Apps auf deinem PC ohne dein Wissen auf eingehende Verbindungen reagieren, aber hier wollen wir das ja. Du muss also deiner Firewall sagen, dass sie auf Port 8001 eingehende Verbindungen zulassen soll. Bei Windows 10 geht das folgendermassen: Windows Firewall -> Erweiterte Einstellungen -> Links: Eingehende Regeln -> Neue Regel... -> Regeltyp: "Port", TCP und 8001 als Port angeben und "weiter" -> Verbindung zulassen -> Profil Domäne und Privat an lassen, Öffentlich aus -> Name ist egal, z.B. "Portfreigabe für DR!FT Server" -> Fertig stellen.
 
 ## Die Zeiten im Racingserver stimmen nicht exakt mit denen in der App überein ##
 Es kann vorkommen, dass die Zeiten um wenige (1-4) Millisekunden unterschiedlich sind. Dieser Fehler ist bekannt und steht auf der TODO-Liste.
