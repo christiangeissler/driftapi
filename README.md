@@ -22,7 +22,7 @@ https://www.docker.com/products/docker-desktop
 Unter Windows musst du noch das Kernel-Upgrade für WSL2 installieren:
 https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
 
-Und Hyper-V sowie Containers in den Windows Einstellungen aktivieren:
+Und Hyper-V sowie Containers in den Windows Einstellungen aktivieren (geht wohl auch ohne bei Windows Home):
 https://www.c-sharpcorner.com/article/how-to-install-docker-desktop-and-troubleshoot-issues-in-windows-machine/
 
 Um zu testen, dass du Docker richtig installiert hast, öffne eine Konsole (Unter Windows geht das über "Shift+Rechtsklick"->"PowerShell Fenster hier öffnen") und tippe den folgenden Befehl, gefolgt von "Enter":
