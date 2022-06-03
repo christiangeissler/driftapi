@@ -146,7 +146,7 @@ graph = ["objgraph (>=1.7.2)"]
 
 [[package]]
 name = "fastapi"
-version = "0.61.2"
+version = "0.65.2"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 category = "main"
 optional = false
@@ -518,7 +518,7 @@ click = ">=7.0.0,<8.0.0"
 h11 = ">=0.8,<0.10"
 httptools = {version = ">=0.1.0,<0.2.0", markers = "sys_platform != \"win32\" and sys_platform != \"cygwin\" and platform_python_implementation != \"PyPy\""}
 uvloop = {version = ">=0.14.0", markers = "sys_platform != \"win32\" and sys_platform != \"cygwin\" and platform_python_implementation != \"PyPy\""}
-websockets = ">=8.0.0,<9.0.0"
+websockets = ">=9.1.0,<10.3.0"
 
 [package.extras]
 watchgodreload = ["watchgod (>=0.6,<0.7)"]
