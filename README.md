@@ -116,7 +116,10 @@ Der zweite häufige Grund ist mangelnder Speicherplatz. Stell sicher, dass auf d
 Kann selten mal passieren, folge einfach den Anweisungen in  [Lösung: Reset](#lösung:-reset).
 
 ### Lösung: Reset ###
-Stell sicher, dass keine Container laufen. In der Docker Desktop GUI, klick auf den oberen Button in der linken Seitenleiste ("Containers/Apps"). Beende alle Container die dort zu sehen sind und lösche diese. Danach klick auf "Images" in der linken Seitenleiste. Lösche auch hier alle. Danach dasselbe mit den "Volumes" darunter. Dann folge den Anweisungen im Kapitel [Installation](#installation) direkt nachdem Docker installiert wurde.
+Starte eine Konsole im Projektordner und gib folgende Befehle ein, um alle laufenden Container zu beenden und von Docker gebauten Container und Daten zu löschen:
+>docker compose --profile racedisplay down
+>docker system prune --all --force --volumes
+Dann folge den Anweisungen im Kapitel [Installation](#installation) direkt nachdem Docker installiert wurde.
 
 ## Die IP unter Connection Info stimmt nicht ##
 Das Problem ist bekannt und steht auf der "Todo" Liste. Ermittel die IP des Laptops auf dem der Server läuft manuell, z.B. über den Konsolenbefehl "ipconfig" unter windows oder "ifconfig" unter linux/ios. Dann öffne die datei ".env" im Hauptverzeichnis des Projektes und änder die Zeile
