@@ -33,7 +33,7 @@ Docker dient als Ausführungsumgebung für die Server, diese laufen als virtuell
 
 Als Zweites musst du dieses Projekt hier herunter laden. Dazu kannst du oben rechts auf den grünen "Code" Button klicken und wählst "Download ZIP" aus. Das Verzeichnis musst du anschließend noch entpacken, die meisten Computer haben dafür schon Software installiert, falls nicht, empfehle ich dafür: [7Zip - Download](https://www.7-zip.de/).
 
-Jetzt folgt der letzte Schritt: Öffne ein Konsolenfenster im Projektordner und gebe den folgenden Befehl ein:
+Jetzt folgt der letzte Schritt: Öffne ein Konsolenfenster im Projektordner ("Shift+Rechtsklick" irgendwo im Ordner->PowerShell-Fenster hier öffnen) und gebe den folgenden Befehl ein:
 
 >docker compose --profile racedisplay up --build
 
