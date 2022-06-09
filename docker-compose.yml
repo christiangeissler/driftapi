@@ -32,7 +32,7 @@ services:
       - 8001:8001
 
   driftapi-db:
-    image: mongo
+    image: mongo:bionic
     ports:
       - 27018:27017
 
