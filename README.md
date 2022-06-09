@@ -31,10 +31,15 @@ Um zu testen, dass du Docker richtig installiert hast, öffne eine Konsole (Unte
 
 Docker dient als Ausführungsumgebung für die Server, diese laufen als virtuelle Maschinen in Docker, so dass wir keine weitere Software direkt auf deinem PC installieren müssen.
 
-Als Zweites musst du dieses Projekt hier herunter laden. installierst du git auf dem pi und ziehst es mit 
+Im zweiten Schritt musst du die Dateien auf den Pi bringen:
+Du kannst git auf dem Pi installieren und dieses Projekt herunter laden mit dem Befehl: 
 > git clone https://github.com/Fooxbox/driftapi
 
-Jetzt folgt der letzte Schritt: Öffne ein Konsolenfenster (oder via SSH) im Projektordner (also "driftapi") und gebe den folgenden Befehl ein:
+Oder du lädst die Struktur manuell herunter und legst sie auf die SD-Karte des Pi ab
+
+
+
+Jetzt folgt der letzte Schritt: Öffne ein Konsolenfenster (oder via SSH) im Projektordner (der sollte "driftapi" heissen) und gebe den folgenden Befehl ein:
 
 >docker compose --profile racedisplay up --build
 
