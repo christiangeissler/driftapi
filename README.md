@@ -14,16 +14,16 @@ Dieser DR!FT Racingserver verfolgt zwei Ziele: Zum einen als Prototyp um die DR!
 
 Achtung: Dieser Server ist nicht dazu geeignet, ihn offen ins Internet zu stellen. Die generierte Webseite hat z.B. keinerlei Sicherheitsmaßnahmen wie eine Benutzerverwaltung oder Passwortschutz, d.h. jeder der die Adresse der Webseite kennt kann dort Rennen anlegen, löschen etc.. Benutzt ihn also besser nur lokal und mit Leuten, die da keinen Mist mit machen. Wir werden in Zukunft sicherlich noch bessere Racingserver sehen, die dann im Internet laufen und auf denen jeder ohne Installation bequem selbst seine Rennen auf machen kann, aber das wird noch eine Weile dauern. Dieser Racingserver dient erst mal der schnellen Entwicklung einer soliden Basis. Wenn du mehr zur Entwicklung etc. wissen willst, schau mal ins Kapitel  [DR!FT Community API](#drift-community-api)
 
+# Vorraussetzungen
+- Basis ist Pi-OS 64Bit bullseye (jippieh, es geht sogar ohne das fette Ubuntu/Debian sondern mit dem entschlackten und schnell bootenden System)
+- Voraussetzung ist ein Pi4. Eventuell kann man es auch auf dem Pi3 und 2w laufen lassen, müsste man testen (ich selbst hab keinen). Pi2 und weniger geht definitiv nicht, sofern man an der MongoDB festhält.
+
 # Installation
-Zunächst musst du die Software "Docker" installieren. Diese gibt es für Windows, iOS und Linux und eine bequeme Desktop-Version bekommst du hier:
+- Zunächst musst du die Software "Docker" installieren. 
 
-https://www.docker.com/products/docker-desktop
+Auf dem Raspberry funktioniert das so:
+https://www.blog.berrybase.de/blog/2022/02/23/docker-auf-dem-raspberry-pi-basics/ 
 
-Unter Windows musst du noch das Kernel-Upgrade für WSL2 installieren:
-https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
-
-Und Hyper-V sowie Containers in den Windows Einstellungen aktivieren (geht wohl auch ohne bei Windows Home):
-https://www.c-sharpcorner.com/article/how-to-install-docker-desktop-and-troubleshoot-issues-in-windows-machine/
 
 Um zu testen, dass du Docker richtig installiert hast, öffne eine Konsole (Unter Windows geht das über "Shift+Rechtsklick"->"PowerShell Fenster hier öffnen") und tippe den folgenden Befehl, gefolgt von "Enter":
 
@@ -31,9 +31,10 @@ Um zu testen, dass du Docker richtig installiert hast, öffne eine Konsole (Unte
 
 Docker dient als Ausführungsumgebung für die Server, diese laufen als virtuelle Maschinen in Docker, so dass wir keine weitere Software direkt auf deinem PC installieren müssen.
 
-Als Zweites musst du dieses Projekt hier herunter laden. Dazu kannst du oben rechts auf den grünen "Code" Button klicken und wählst "Download ZIP" aus. Das Verzeichnis musst du anschließend noch entpacken, die meisten Computer haben dafür schon Software installiert, falls nicht, empfehle ich dafür: [7Zip - Download](https://www.7-zip.de/).
+Als Zweites musst du dieses Projekt hier herunter laden. installierst du git auf dem pi und ziehst es mit 
+> git clone https://github.com/Fooxbox/driftapi
 
-Jetzt folgt der letzte Schritt: Öffne ein Konsolenfenster im Projektordner ("Shift+Rechtsklick" irgendwo im Ordner->PowerShell-Fenster hier öffnen) und gebe den folgenden Befehl ein:
+Jetzt folgt der letzte Schritt: Öffne ein Konsolenfenster (oder via SSH) im Projektordner (also "driftapi") und gebe den folgenden Befehl ein:
 
 >docker compose --profile racedisplay up --build
 
@@ -68,7 +69,7 @@ Deinstallation: Für eine Deinstalation löscht ihr einfach den heruntergeladene
 # Bedienung
 Öffne einen Browser deiner Wahl (Chrome und Firefox sind getestet, Safari macht vielleicht Probleme) und gib die folgende Adresse ein:
 
->127.0.0.1:8080
+> [IP des Pi]:8080
 
 Du solltest ins Hauptmenü des Servers kommen, von wo aus du Rennen anlegen (Create New Game) oder zuvor angelegte Rennen aufrufen (Show Game) kannst. Hinweis: Sobald ein Rennen angelegt wurde, nimmt der Server Daten von der App entgegen, unabhängig davon, ob du das Browserfenster offen lässt oder welches Rennen du gerade anzeigst. Du kannst also ruhig mehrere Rennen erstellen die gleichzeitig von Spielern genutzt werden.
 
