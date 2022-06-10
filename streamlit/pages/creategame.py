@@ -38,7 +38,7 @@ def app():
                 with columnRight:
      
                     time1 = datetime.now(tz=ZoneInfo("Europe/Berlin"))
-                    timedelta_1 = datetime.timedelta(hours=2)
+                    timedelta_1 = time1.utcoffset()
                     start_time = st.time_input('Start time (Local)', value=datetime.now(tz=ZoneInfo("Europe/Berlin")), key=None, help=None, on_change=None, disabled = False)
                     start_time = datetime.combine(datetime.today(), start_time)-timedelta_1
                     start_time = start_time.astimezone(timezone.utc)
