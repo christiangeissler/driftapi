@@ -74,8 +74,9 @@ Du solltest ins Hauptmenü des Servers kommen, von wo aus du Rennen anlegen (Cre
 
 Sobald du ein neues Rennen über das Menü angelegt hast, kannst du in der DR!FT-App über folgende URI beitreten:
 
->http://<ip-des-servers>:8001/game
-wobei du <ip-des-server> mit der IP des Computers auf dem du den Server laufen lässt, ersetzt. Beispiel: Wenn mein PC die IP 192.168.40.23 hat, dann muss ich in der DR!FT App http://192.168.40.23:8001/game eingeben. Die game-id in der app muss genau so heissen wie die vom Spiel das du erstellst und dein Nutzername sollte möglichst keine Sonderzeichen wie ' enthalten.
+>`http://<ip-des-servers>:8001/game`
+ 
+wobei du `<ip-des-server>` mit der IP des Computers auf dem du den Server laufen lässt, ersetzt. Beispiel: Wenn mein PC die IP 192.168.40.23 hat, dann muss ich in der DR!FT App http://192.168.40.23:8001/game eingeben. Die game-id in der app muss genau so heissen wie die vom Spiel das du erstellst und dein Nutzername sollte möglichst keine Sonderzeichen wie ' enthalten.
 
 ## Create New Game
 Wähle eine Game ID ohne Leerzeichen. Tipp: Wähle kurze, einfache Bezeichner, da die Spieler diese ja auch in der App eingeben müssen. Dann klicke auf "Create" um ein Rennen anzulegen oder wähle zuvor "Optional settings" um Einstellungen für die Spieler vorzunehmen. Wenn sich ein Spieler mit dem Server synchronisiert, dann werden die hier gewählten Einstellungen als Renneinstellungen übernommen (Achtung: Die Spieler können diese anschließend immer noch ändern, diese sind nur ein "Vorschlag"). Auf der linken Seite bei "Enable..." muss bei einer Option ein Haken gesetzt werden, auf der rechten Seite wird der konkrete Wert eingestellt. Die meisten Optionen sollten Selbsterklärend sein, daher hier nur ein paar Hinweise zu den komplizierteren:
