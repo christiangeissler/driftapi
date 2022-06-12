@@ -20,7 +20,7 @@ if __name__ == '__main__':
     _max_width_(90)
     app = MultiPage()
     # Title of the main page
-    st.title("DR!FT Racingserver Prototype")
+    st.title("DR!FT Racingserver Raspberry Mod")
 
     # Add all your applications (pages) here
     app.add_page("main_page", mainpage.app)
