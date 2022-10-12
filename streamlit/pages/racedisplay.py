@@ -124,7 +124,7 @@ def app():
                     "Runden":r["laps_completed"] if "laps_completed" in r else 0,
                     "Beste":showTime(r["best_lap"]) if "best_lap" in r else showTime(None),
                     "Letzte":showTime(r["last_lap"]) if "last_lap" in r else showTime(None),
-                    #"Punkte":r["total_score"] if ("total_score" in r) and (not (r["total_score"] is None)) else 0,
+                    "Punkte":r["total_score"] if ("total_score" in r) and (not (r["total_score"] is None)) else 0,
                     "Gesamtzeit":showTime(r["total_time"]) if "total_time" in r else showTime(None),
                 }
 
