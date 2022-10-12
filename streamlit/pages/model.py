@@ -55,18 +55,17 @@ class Orientation(BaseModel):
 class EnterData(BaseModel):
     game_mode: game_mode
     start_time:Optional[datetime]
-    start_delay:Optional[float] = Field(None, title="Hidden start delay between the yellow and green race light. In the range of 0-2 seconds. This is added to the minimum of 1 second.")
     lap_count: int = Field(None, title="number of rounds (for the race mode)")
     track_condition: track_condition
     track_bundle: track_bundle
     wheels: wheels
     setup_mode: setup_mode
-    car_name: str = Field(None, title="The name of the car as set by the player.", example="Yellow Beast")
     engine_type: str = Field(None, title="The id of the motor type. No ENUM because this might get extended. Example: 'DTM', 'V8' etc.", example="V8") 
     tuning_type: str = Field(None, title="The id of the motor setup. No ENUM because this might get extended.", example="BASIC SETUP 550 PS")
     steering_angle: float = Field(None, title="the choosen steering angle as set in the settings menue of the app", example=70.0)
     softsteering:bool = Field(None, title="if softsteering is enabled in the settings menue of the app.", example=False)
     driftassist:bool = Field(None, title="if driftassist is enabled in the settings menue of the app.", example=True)
+    car_name: str = Field(None, title="The name of the car as set by the player.", example="Yellow Beast")
 
 class StartData(BaseModel):
     signal_time:datetime = Field(None, title="The actual time if the signal lamp shows the green light.")
