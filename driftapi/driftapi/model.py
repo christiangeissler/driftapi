@@ -5,7 +5,7 @@ Note: for a complete server implementation, you probably want to also define som
 
 """
 from enum import Enum
-from typing import Optional
+from typing import Optional, List
 from uuid import UUID
 from datetime import datetime
 
@@ -48,23 +48,31 @@ class target_code(int, Enum):
     drift_ice = 7 # Rally
     drift_sand = 7 # Rally Cross
 
+class Orientation(BaseModel):
+    speed:float = Field(None, title="speed in meter/second")
+    angle:float = Field(None, title="angle, in degree, negative values for left-turns")
+
 class PingResponse(BaseModel):
     status:bool = Field(None, example=True)
     start_time:Optional[datetime]
+    start_delay:Optional[float] = Field(None, title="Hidden start delay between the yellow and green race light. In the range of 0-2 seconds. This is added to the minimum of 1 second.")
     lap_count:Optional[int] = Field(None, title="number of rounds (for the race mode)")
-    track_condition:Optional[ track_condition]
-    track_bundle:Optional[ track_bundle]
-    wheels:Optional[ wheels]
-    setup_mode:Optional[ setup_mode]
+    track_condition:Optional[track_condition]
+    track_bundle:Optional[track_bundle]
+    wheels:Optional[wheels]
+    setup_mode:Optional[setup_mode]
+    
 
 class EnterData(BaseModel):
     game_mode: game_mode
     start_time:Optional[datetime]
+    start_delay:Optional[float] = Field(None, title="Hidden start delay between the yellow and green race light. In the range of 0-2 seconds. This is added to the minimum of 1 second.")
     lap_count: int = Field(None, title="number of rounds (for the race mode)")
     track_condition: track_condition
     track_bundle: track_bundle
     wheels: wheels
     setup_mode: setup_mode
+    car_name: str = Field(None, title="The name of the car as set by the player.", example="Yellow Beast")
     engine_type: str = Field(None, title="The id of the motor type. No ENUM because this might get extended. Example: 'DTM', 'V8' etc.", example="V8") 
     tuning_type: str = Field(None, title="The id of the motor setup. No ENUM because this might get extended.", example="BASIC SETUP 550 PS")
     steering_angle: float = Field(None, title="the choosen steering angle as set in the settings menue of the app", example=70.0)
@@ -87,6 +95,7 @@ class TargetData(BaseModel):
     driven_distance:float = Field(None, title="The distance driven so far", example=23.0)
     driven_time:float = Field(None, title="Time in seconds the player is driving so far in this race", example=42.0)
     score:int = Field(None, title="Amount of points awarded for this target. Work in progress.", example=100)
+    orientations:List[Orientation] = Field(None, title="a list of orientations, each orientation has a speed and angle value.")
 
 class EndData(BaseModel):
     finished_time: datetime

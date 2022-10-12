@@ -19,6 +19,8 @@ class Game(BaseModel):
     #password_sh3:Optional[str]
     start_time:Optional[datetime]
 
+    start_delay:Optional[float]
+
     track_id:Optional[str]
 
     time_limit:Optional[float] = Field(None, title="the time limit for the run, in seconds")

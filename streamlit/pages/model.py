@@ -5,7 +5,7 @@ Note: for a complete server implementation, you probably want to also define som
 
 """
 from enum import Enum
-from typing import Optional
+from typing import Optional, List
 from uuid import UUID
 from datetime import datetime
 
@@ -48,19 +48,25 @@ class target_code(str, Enum):
     drift_ice = "7" # Rally
     drift_sand = "7" # Rally Cross
 
+class Orientation(BaseModel):
+    speed:float = Field(None, title="speed in meter/second")
+    angle:float = Field(None, title="angle, in degree, negative values for left-turns")
+
 class EnterData(BaseModel):
     game_mode: game_mode
-    start_time: datetime
+    start_time:Optional[datetime]
+    start_delay:Optional[float] = Field(None, title="Hidden start delay between the yellow and green race light. In the range of 0-2 seconds. This is added to the minimum of 1 second.")
     lap_count: int = Field(None, title="number of rounds (for the race mode)")
     track_condition: track_condition
     track_bundle: track_bundle
     wheels: wheels
     setup_mode: setup_mode
-    engine_type: str = Field(None, title="The id of the motor type. No ENUM for the above reason. Example: 'DTM', 'V8' etc.") 
-    tuning_type: str = Field(None, title="The id of the motor setup. No ENUM for the above reason. Example: 'DTM', 'V8' etc.")  #according to the app-internal id for the different motor setups. No ENUM for the above reason.
-    steering_angle: float = Field(None, title="the choosen steering angle as set in the settings menue of the app")
-    softsteering:bool = Field(None, title="if softsteering is enabled in the settings menue of the app.")
-    driftassist:bool = Field(None, title="if driftassist is enabled in the settings menue of the app.")
+    car_name: str = Field(None, title="The name of the car as set by the player.", example="Yellow Beast")
+    engine_type: str = Field(None, title="The id of the motor type. No ENUM because this might get extended. Example: 'DTM', 'V8' etc.", example="V8") 
+    tuning_type: str = Field(None, title="The id of the motor setup. No ENUM because this might get extended.", example="BASIC SETUP 550 PS")
+    steering_angle: float = Field(None, title="the choosen steering angle as set in the settings menue of the app", example=70.0)
+    softsteering:bool = Field(None, title="if softsteering is enabled in the settings menue of the app.", example=False)
+    driftassist:bool = Field(None, title="if driftassist is enabled in the settings menue of the app.", example=True)
 
 class StartData(BaseModel):
     signal_time:datetime = Field(None, title="The actual time if the signal lamp shows the green light.")
@@ -72,6 +78,7 @@ class TargetData(BaseModel):
     driven_distance:float
     driven_time:float
     score:int
+    orientations:List[Orientation] = Field(None, title="a list of orientations, each orientation has a speed and angle value.")
 
 class EndData(BaseModel):
     finished_time: datetime

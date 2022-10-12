@@ -41,6 +41,7 @@ async def ping(game_id:str):
     if game:
         reply = {"status": True}
         if game.start_time: reply["start_time"] = game.start_time
+        if game.start_delay: reply["start_delay"] = game.start_delay
         if game.lap_count: reply["lap_count"] = game.lap_count
         if game.track_condition: reply["track_condition"] = game.track_condition
         if game.track_bundle: reply["track_bundle"] = game.track_bundle
