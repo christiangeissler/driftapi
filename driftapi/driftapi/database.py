@@ -84,7 +84,7 @@ class DbClient:
                     playerStatus.last_lap_timestamp = playerStatus.start_data.signal_time
 
             if obj.data.score>0:
-                playerStatus.total_score += obj.data.score
+                playerStatus.total_score += int(obj.data.score)
                 
             playerStatus.last_recognized_target = obj.data.target_code
             self.playerstatus_db.update(playerStatusId, playerStatus)
@@ -107,9 +107,9 @@ class DbClient:
                 playerStatus.total_score = playerStatus.end_data.total_score
                 self.playerstatus_db.update(playerStatusId, playerStatus)
 
-
+        self.raceevent_db.insert(values)
         return "OK"#self.raceevent_db.insert(values)
-    '''
+    
     def update_raceevent(self, id_: str, raceevent: RaceEvent) -> bool:
         values = {**raceevent.dict(), "updated_at": get_time()}
         return self.raceevent_db.update(id_, values)
@@ -125,7 +125,7 @@ class DbClient:
     def find_raceevent(self, query:dict) -> List[RaceEvent]:
         res = self.raceevent_db.find(query)
         return res and [_convert(x, globals()[x["class"]]) for x in res]
-    '''
+    
 
     def get_scoreboard(self, game_id:str) -> List[PlayerStatus]:
         query = {"game_id":game_id}
@@ -141,7 +141,7 @@ class DbClient:
             user_id = obj.user_id,
             user_name = obj.user_name,
             laps_completed = 0,
-            total_points = 0,
+            total_score = 0,
             total_time = "",
             last_lap = None,
             best_lap = None,
