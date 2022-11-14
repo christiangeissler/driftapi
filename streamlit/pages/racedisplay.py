@@ -121,6 +121,7 @@ def app():
             def constructEntry(r:dict):
                 d = {
                     "Spieler":r["user_name"] if "user_name" in r else "",
+                    "Auto":(r["enter_data"])["car_name"] if "enter_data" in r else "",
                     "Runden":r["laps_completed"] if "laps_completed" in r else 0,
                     "Beste":showTime(r["best_lap"]) if "best_lap" in r else showTime(None),
                     "Letzte":showTime(r["last_lap"]) if "last_lap" in r else showTime(None),

@@ -2,6 +2,7 @@ import streamlit as st
 from zoneinfo import ZoneInfo #to set the timezone to german time
 from enum import Enum
 from datetime import datetime, timezone, timedelta
+import random
 from  .session import fetch_post, fetch_put
 from .singletons import settings, logger
 from .model import track_condition, track_bundle, wheels, setup_mode, target_code
@@ -43,7 +44,10 @@ def app():
                     start_time = datetime.combine(datetime.today(), start_time)-timedelta_1
                     start_time = start_time.astimezone(timezone.utc)
 
-
+            with st.container():
+                columnLeft, columnRight = st.columns(2)
+                with columnLeft:
+                    enable_start_delay = st.checkbox("Enable random start delay", value=False, key=None, help="Enable a random delay of 1-3 seconds between the yellow and green light", on_change=None)
 
             with st.container():
                 columnLeft, columnRight = st.columns(2)
@@ -112,6 +116,9 @@ def app():
 
                 if time_limit_enabled:
                     body['time_limit'] = str(time_limit)
+
+                if enable_start_delay:
+                    body['start_delay'] = random.uniform(0,2)
 
                 if lap_limit_enabled:
                     body['lap_count'] = str(lap_count)

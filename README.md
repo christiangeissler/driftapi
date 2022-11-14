@@ -170,6 +170,7 @@ Wenn der Nutzer die API im Rennmenü aktiviert, versucht die App zunächst den /
 >{
 >  "status": true,
 >  "start_time": "2022-05-31T18:40:45.194Z",
+>  "start_delay": 1.23,
 >  "lap_count": 0,
 >  "track_condition": "drift_asphalt",
 >  "track_bundle": "none",

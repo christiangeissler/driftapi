@@ -8,6 +8,7 @@ COPY pyproject.toml poetry.lock ./
 COPY ./driftapi ./driftapi
 RUN poetry build
 
+
 # build the actual image with just Python + PIP
 FROM tiangolo/uvicorn-gunicorn:python3.8-slim
 COPY --from=builder /app/dist/driftapi*.whl ./whl/
