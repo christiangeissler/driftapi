@@ -1,4 +1,4 @@
-FROM python:3.9.12
+FROM arm64v8/python:3.10.4-bullseye
 WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt

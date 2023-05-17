@@ -1,5 +1,5 @@
 # Generic Poetry Build Stage
-FROM python:3.9.7-slim as builder
+FROM arm64v8/python:3.10.4-bullseye as builder
 RUN pip3 install "poetry==1.1.11"
 
 # copy and build service to Wheel
@@ -10,7 +10,8 @@ RUN poetry build
 
 
 # build the actual image with just Python + PIP
-FROM tiangolo/uvicorn-gunicorn:python3.8-slim
+# FROM tiangolo/uvicorn-gunicorn:python3.8
+FROM tedivm/uvicorn-gunicorn:latest
 COPY --from=builder /app/dist/driftapi*.whl ./whl/
 RUN pip3 install ./whl/*
 
